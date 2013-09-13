@@ -18,8 +18,6 @@ git push heroku master
 ### Nodejitsu
 
 ```bash
-# In BuckyServer/
-
 jitsu deploy
 ```
 
@@ -32,8 +30,6 @@ You can use environment variables to control runtime options, or put them in you
 file in the `server` section.
 
 ```bash
-# In BuckyServer/
-
 npm install
 PORT=3333 APP_ROOT=bucky/ ./start.js
 ```
