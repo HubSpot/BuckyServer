@@ -8,7 +8,7 @@ statsd:
 
 opentsdb:
   host: 'localhost'
-  port: 5555
+  port: 4242
 
 modules:
   app:
