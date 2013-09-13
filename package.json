@@ -1,0 +1,24 @@
+{
+  "name": "bucky-server",
+  "version": "0.1.0",
+  "description": "Server to aggregate stats from the client and node into the metrics collector of your choice",
+  "main": "start.js",
+  "repository": {
+    "type": "git",
+    "url": "HubSpot/Bucky"
+  },
+  "contributors": [
+    "Zack Bloom <zbloom@hubspot.com>",
+    "Ze'ev Klapow <zklapow@hubspot.com>"
+  ],
+  "dependencies": {
+    "yaml": "~0.2.3",
+    "express": "~3.2.5",
+    "coffee-script": "~1.6.2",
+    "lynx": "~0.0.11",
+    "underscore": "~1.4.4",
+    "nopents": "~0.0.6",
+    "config": "~0.4.27",
+    "q": "~0.9.6"
+  }
+}
