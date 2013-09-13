@@ -1,1 +1,1 @@
-web: "node start.js"
+web: "./start.js"
