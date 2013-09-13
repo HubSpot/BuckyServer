@@ -2,7 +2,7 @@ Q = require 'q'
 _ = require 'underscore'
 
 load = require "../lib/load"
-modules = require("config").Modules
+modules = require("config").modules
 
 module.exports = ({app, logger, config}, next) ->
   collectorHandler = (collectors) ->
@@ -12,11 +12,11 @@ module.exports = ({app, logger, config}, next) ->
       for coll in collectors
         coll(req.body, {req, res})
 
-  logger.log "Loading collectors: #{ modules.Collectors }"
+  logger.log "Loading collectors: #{ modules.collectors.join(', ') }"
 
   collectors = {}
   collPromises = []
-  _.map modules.Collectors, (name) ->
+  _.map modules.collectors, (name) ->
     promise = load name, {logger, config, app}
     promise.then (ret) ->
       logger.log "Collector #{ name } ready"

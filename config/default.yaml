@@ -12,7 +12,6 @@ opentsdb:
 
 modules:
   app:
-    - ./modules/sentry
     - ./modules/trustProxy
     - ./modules/auth
     # This should be last so that collectors get installed as the last handlers in the chain

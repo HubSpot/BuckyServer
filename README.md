@@ -139,8 +139,8 @@ App modules get loaded once, and can optionally provide a function to be ran wit
 
 Simple app modules are a good place to put any server config, initialization code, etc.
 
-We use app modules to make [little tweaks](modules/trustProxy.coffee) to how express works and
-[enable monitoring](modules/sentry.coffee).
+We use app modules to make [little tweaks](modules/trustProxy.coffee) to how express works and enable
+monitoring.
 
 App modules are called at initialize-time with a hash including a reference to the express app:
 

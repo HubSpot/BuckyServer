@@ -38,7 +38,11 @@ loadApp = (logger, config) ->
       _.map MODULES[group], (name) ->
         logger.log "Loading #{ group } Module", name
 
-        promise = load name, {logger, config, app}
+        try
+          promise = load name, {logger, config, app}
+        catch e
+          console.log "Error loading module", e?.stack
+
         promise.then (ret) ->
           logger.log name, "Ready"
           moduleGroups[group][name] = ret
@@ -47,7 +51,7 @@ loadApp = (logger, config) ->
     else
       []
 
-  appPromises = loadModuleGroup 'App'
+  appPromises = loadModuleGroup 'app'
 
   Q.all(appPromises).then ->
     logger.log "Binding Routes at %s", (APP_ROOT or '/')
@@ -55,7 +59,7 @@ loadApp = (logger, config) ->
     # Allow modules to bind to any number of endpoints
     # Most should simply bind to "send"
     routes = {}
-    for name, _routes of moduleGroups.App
+    for name, _routes of moduleGroups.app
       continue if not _routes?
 
       if _.isFunction _routes
@@ -71,6 +75,16 @@ loadApp = (logger, config) ->
     for path, handlers of routes
       # Bind all request modules as middleware and install the collectors
       app.post.apply app, _.union(path, handlers)
+
+      app.options path, (req, res) ->
+        # CORS support
+        
+        res.setHeader 'Access-Control-Allow-Origin', '*'
+        res.setHeader 'Access-Control-Allow-Methods', 'POST'
+        res.setHeader 'Access-Control-Max-Age', '604800'
+        res.setHeader 'Access-Control-Allow-Credentials', 'true'
+
+        res.send 200, ''
 
     app.get "#{ APP_ROOT }/warmup", (req, res) ->
       res.send('warmed up')
