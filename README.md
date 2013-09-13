@@ -29,7 +29,7 @@ If you'd rather host Bucky on EC2 directly or on raw hardware, you just need som
 which will run `./start.js` in a reliable way.
 
 You can use environment variables to control runtime options, or put them in your config
-file in the `Server` section.
+file in the `server` section.
 
 ```bash
 # In BuckyServer/
@@ -38,7 +38,7 @@ npm install
 PORT=3333 APP_ROOT=bucky/ ./start.js
 ```
 
-The `APP_ROOT` (or `config.Server.AppRoot`) will prefix all endpoints.
+The `APP_ROOT` (or `config.server.appRoot`) will prefix all endpoints.
 
 Bucky will respond to all requests at `/APP_ROOT/warmup`, if you need a health check url.
 
