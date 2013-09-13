@@ -47,12 +47,10 @@ to `/APP_ROOT/send` on whichever port you specify.
 
 ## Configuring
 
-The Bucky server is designed to be as modular as is possible to allow you
-to customize it to your needs without having to modify the core app.
+Most people will only need to specify [config/defaults.yaml](the config) their interested in
+and start up the server.
 
-We use 'modules' (which are just node modules) to break out portions of the
-app.  You can specify which modules you'd like to use in the `config/default.yaml`
-config file.
+If you need more customization, you can write a module:
 
 ### Modules
 
