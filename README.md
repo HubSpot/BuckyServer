@@ -6,7 +6,7 @@ Statsd/Graphite, OpenTSDB, etc.
 ## Hosting
 
 Everything you need to run Bucky on Heroku or Nodejitsu is included, just update the
-[config/defaults.yaml](config file) and push to the service of your choice.
+(config/defaults.yaml)[config file] and push to the service of your choice.
 
 ### Heroku
 
@@ -43,7 +43,7 @@ to `/APP_ROOT/send` on whichever port you specify.
 
 ## Configuring
 
-Most people will only need to specify [config/defaults.yaml](the config) their interested in
+Most people will only need to specify (config/defaults.yaml)[the config] their interested in
 and start up the server.
 
 If you need more customization, you can write a module:
@@ -130,7 +130,7 @@ called with like this:
 ```
 
 You are free to implement the `on` method as a dud if live reloading doesn't
-make sense using your config system.  Take a look at [lib/configWrapper.coffee](lib/configWrapper.coffee)
+make sense using your config system.  Take a look at (lib/configWrapper.coffee)[lib/configWrapper.coffee]
 for an example of how a basic object can be converted.
   
 #### App
@@ -139,8 +139,8 @@ App modules get loaded once, and can optionally provide a function to be ran wit
 
 Simple app modules are a good place to put any server config, initialization code, etc.
 
-We use app modules to make [modules/trustProxy.coffee](little tweaks) to how express works and
-[modules/sentry.coffee](enable monitoring).
+We use app modules to make (modules/trustProxy.coffee)[little tweaks] to how express works and
+(modules/sentry.coffee)[enable monitoring].
 
 App modules are called at initialize-time with a hash including a reference to the express app:
 
@@ -164,15 +164,15 @@ module.exports = ({app, logger, config}, next) ->
 ```
 
 These functions work like middleware, they are called sequentially.  You can use them to implement
-things like [modules/auth.coffee](auth) if you need it.
+things like (modules/auth.coffee)[auth] if you need it.
 
 #### Collectors
 
 It's not a standard type of module (the core of Bucky has no idea about it), but the default
-[modules/collectors.coffee](collectors app module) looks to a forth type of module to know
+(modules/collectors.coffee)[collectors app module] looks to a forth type of module to know
 where to send data.
 
-[modules/statsd.coffee](Statsd) and [modules/openTSDB.coffee](OpenTSDB) collectors are included.
+(modules/statsd.coffee)[Statsd] and (modules/openTSDB.coffee)[OpenTSDB] collectors are included.
 
 Collectors should export a function which is called on initialize, and call the callback with a hash
 mapping endpoints to handlers.
