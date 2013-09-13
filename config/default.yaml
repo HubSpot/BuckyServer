@@ -20,6 +20,5 @@ modules:
 
   collectors:
     - ./modules/collectionLogger
-    - ./modules/collectedCounter
     - ./modules/statsd
     - ./modules/openTSDB
