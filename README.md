@@ -68,13 +68,11 @@ config file.
 We can only have one logger and one config, but you can specify as many app and collector modules
 as you like.
 
-#### Writing Modules
-
 All modules follow the same basic sketch.  You export a method which is called when Bucky
 starts up.  That method is provided with as much of `{app, config, logger}` as we have
 loaded so far, and is expected to call a callback when it's ready for the loading to continue.
 
-##### Logger
+#### Logger
 
 Used to log output.  Defaults to a wrapper around console.log/console.error.
 
@@ -102,7 +100,7 @@ module.exports = ({logger}, next) ->
   next myNewLogger
 ```
 
-##### Config
+#### Config
 
 By default config comes from the config files loaded using the node `config` module.
 
@@ -141,7 +139,7 @@ You are free to implement the `on` method as a dud if live reloading doesn't
 make sense using your config system.  Take a look at [lib/configWrapper.coffee](lib/configWrapper.coffee)
 for an example of how a basic object can be converted.
   
-##### App
+#### App
 
 App modules get loaded once, and can optionally provide a function to be ran with each request.
 
@@ -174,7 +172,7 @@ module.exports = ({app, logger, config}, next) ->
 These functions work like middleware, they are called sequentially.  You can use them to implement
 things like [modules/auth.coffee](auth) if you need it.
 
-##### Collectors
+#### Collectors
 
 It's not a standard type of module (the core of Bucky has no idea about it), but the default
 [modules/collectors.coffee](collectors app module) looks to a forth type of module to know
