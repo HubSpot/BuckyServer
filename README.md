@@ -6,7 +6,7 @@ Statsd/Graphite, OpenTSDB, etc.
 ## Hosting
 
 Everything you need to run Bucky on Heroku or Nodejitsu is included, just update the
-[config file](config/defaults.yaml) and push to the service of your choice.
+[config file](config/default.yaml) and push to the service of your choice.
 
 ### Heroku
 
