@@ -1,7 +1,7 @@
 ## Bucky Server
 
 Bucky uses a Node server to forward the HTTP requests with your monitoring data to
-Statsd/Graphite, OpenTSDB, etc.
+Statsd/Graphite, OpenTSDB, or whatever other service you'd like.
 
 ## Hosting
 
@@ -21,6 +21,9 @@ git push heroku master
 jitsu deploy
 ```
 
+The jitsu application will ask you for a subdomain to run the service on, and will
+increment the version of the application whenever you deploy.
+
 ### EC2 / Bare Metal
 
 If you'd rather host Bucky on EC2 directly or on raw hardware, you just need something
@@ -29,7 +32,13 @@ which will run `./start.js` in a reliable way.
 You can use environment variables to control runtime options, or put them in your config
 file in the `server` section.
 
+You'll need to have [nodejs](http://nodejs.org/) installed.  Anything in the 0.8.x series or above should work
+fine.  We recommend using [nvm](https://github.com/creationix/nvm), as it gives you an extra dimention
+of flexability, but using your system's package manager should work just as well.
+
 ```bash
+# In the project directory:
+
 npm install
 PORT=3333 APP_ROOT=bucky/ ./start.js
 ```
@@ -49,6 +58,9 @@ and start up the server.
 If you need more customization, you can write a module:
 
 ### Modules
+
+There are a few of types of modules:
+
 
 - Logger
   Use to have Bucky log to something other than the console
@@ -131,7 +143,7 @@ called with like this:
 
 You are free to implement the `on` method as a dud if live reloading doesn't
 make sense using your config system.  Take a look at [lib/configWrapper.coffee](lib/configWrapper.coffee)
-for an example of how a basic object can be converted.
+for an example of how a basic object can be converted (and feel free to use it).
   
 #### App
 
@@ -156,10 +168,10 @@ If the callback is called with a hash, it is expected to be a mapping between en
 ```coffeescript
 module.exports = ({app, logger, config}, next) ->
   next
-    send: (req, res) ->
+    send: (req, res, _next) ->
       # Standard express request handling stuff in here
 
-    someOtherEndpoint: (req, res) ->
+    someOtherEndpoint: (req, res, _next) ->
        # Will get requests which are sent to /someOtherEndpoint
 ```
 
@@ -169,7 +181,7 @@ things like [auth](modules/auth.coffee) if you need it.
 #### Collectors
 
 It's not a standard type of module (the core of Bucky has no idea about it), but the default
-[collectors app module](modules/collectors.coffee) looks to a forth type of module to know
+[collectors app module](modules/collectors.coffee) looks to a fourth type of module to know
 where to send data.
 
 [Statsd](modules/statsd.coffee) and [OpenTSDB](modules/openTSDB.coffee) collectors are included.
