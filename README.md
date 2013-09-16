@@ -45,7 +45,7 @@ PORT=3333 APP_ROOT=bucky/ ./start.js
 
 The `APP_ROOT` (or `config.server.appRoot`) will prefix all endpoints.
 
-Bucky will respond to all requests at `/APP_ROOT/warmup`, if you need a health check url.
+Bucky will respond to all requests at `/APP_ROOT/health-check`, if you need a health check url.
 
 Bucky can be setup to receive data at multiple endpoints, but by default it listens
 to `/APP_ROOT/send` on whichever port you specify.
