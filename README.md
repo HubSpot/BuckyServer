@@ -52,7 +52,7 @@ to `/APP_ROOT/send` on whichever port you specify.
 
 ## Configuring
 
-Most people will only need to specify [the config](config/defaults.yaml) their interested in
+Most people will only need to specify [the config](config/default.yaml) they're interested in
 and start up the server.
 
 If you need more customization, you can write a module:
