@@ -86,8 +86,8 @@ loadApp = (logger, config) ->
 
         res.send 200, ''
 
-    app.get "#{ APP_ROOT }/warmup", (req, res) ->
-      res.send('warmed up')
+    app.get "#{ APP_ROOT }/health-check", (req, res) ->
+      res.send('OK\n')
 
     port = process.env.PORT ? config.server?.port ? 5000
     app.listen(port)
