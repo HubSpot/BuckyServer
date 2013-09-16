@@ -1,5 +1,5 @@
 #!/usr/bin/env coffee
-#
+
 Q = require 'q'
 _ = require 'underscore'
 config = require 'config'
