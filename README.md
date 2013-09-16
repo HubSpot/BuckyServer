@@ -63,12 +63,16 @@ There are a few of types of modules:
 
 
 - Logger
+
   Use to have Bucky log to something other than the console
 - Config
+
   Use to have Bucky pull config from somewhere other than the default file
 - App
+
   Use to do things when Bucky loads and/or on requests.  Auth, monitoring initialization, etc.
 - Collectors
+
   Use to send Bucky data to new and exciting places.
 
 We can only have one logger and one config, but you can specify as many app and collector modules
