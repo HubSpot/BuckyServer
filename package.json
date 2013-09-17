@@ -1,7 +1,7 @@
 {
   "name": "bucky-server",
   "version": "0.1.0",
-  "description": "Server to aggregate stats from the client and node into the metrics collector of your choice",
+  "description": "Server to collect stats from the client",
   "main": "start.js",
   "scripts": {
     "start": "./start.js"
