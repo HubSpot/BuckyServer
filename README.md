@@ -3,6 +3,8 @@
 Bucky uses a Node server to forward the HTTP requests with your monitoring data to
 Statsd/Graphite, OpenTSDB, or whatever other service you'd like.
 
+Also see the [Bucky Client](http://github.hubspot.com/BuckyClient/) for js.
+
 ## Hosting
 
 Everything you need to run Bucky on Heroku or Nodejitsu is included, just update the
