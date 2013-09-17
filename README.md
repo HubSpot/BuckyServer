@@ -52,6 +52,9 @@ to `/APP_ROOT/send` on whichever port you specify.
 
 ## Configuring
 
+If you're not already running a stats collection service, you should take a look at our
+[help doc](docs/start-no-stats.md).
+
 Most people will only need to specify [the config](config/default.yaml) they're interested in
 and start up the server.
 
