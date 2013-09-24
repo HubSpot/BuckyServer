@@ -124,8 +124,8 @@ modules comes from the `config` module, so the list of modules must always be
 specified there.  All other config options can be moved to your config solution
 of choice using this extension point.
 
-At HubSpot, we use a config solution which supports live reloading of config
-values.  For this reason, the config api is a bit more complex than you might
+At HubSpot, we're believers in config which can be changed without restarting
+services. For this reason, the config api is a bit more complex than you might
 expect.  A wrapper is provided in `lib/configWrapper.coffee` for you to use
 should you wish to use a simpler solution.
 
