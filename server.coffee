@@ -31,7 +31,7 @@ loadApp = (logger, config) ->
   # a request from IE8 with XDomainRequest, we can't set the
   # content-type to application/json.
   jsonMiddleware.regexp = /.*/
-  app.use jsonMiddleware
+  app.use jsonMiddleware()
 
   APP_ROOT = process.env.APP_ROOT ? config.server?.appRoot ? ''
 
@@ -79,7 +79,7 @@ loadApp = (logger, config) ->
 
     for path, handlers of routes
       # Bind all request modules as middleware and install the collectors
-      app.post.apply app, _.union(path, [parser], handlers)
+      app.post path, handlers...
 
       app.options path, (req, res) ->
         # CORS support

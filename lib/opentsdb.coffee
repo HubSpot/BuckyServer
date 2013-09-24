@@ -15,8 +15,6 @@ class Client
     for key, desc of metrics
       [val, unit, sample] = @parseRow desc
 
-      continue unless unit is 'ms'
-
       data.push {key: key, val: val, tags: {source: 'bucky'}}
 
     @nopents.send data
