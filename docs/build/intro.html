@@ -1,0 +1,164 @@
+<h2>Bucky Server</h2>
+<p>Bucky uses a Node server to forward the HTTP requests with your monitoring data to
+Statsd/Graphite, OpenTSDB, or whatever other service you&#39;d like.</p>
+<p>Also see the <a href="http://github.hubspot.com/BuckyClient/">Bucky Client</a> for js.</p>
+<h2>Hosting</h2>
+<p>Everything you need to run Bucky on Heroku or Nodejitsu is included, just update the
+<a href="config/default.yaml">config file</a> and push to the service of your choice.</p>
+<h3>Heroku</h3>
+<pre><code class="lang-bash">heroku create
+git push heroku master</code></pre>
+<h3>Nodejitsu</h3>
+<pre><code class="lang-bash">jitsu deploy</code></pre>
+<p>The jitsu application will ask you for a subdomain to run the service on, and will
+increment the version of the application whenever you deploy.</p>
+<h3>EC2 / Bare Metal</h3>
+<p>If you&#39;d rather host Bucky on EC2 directly or on raw hardware, you just need something
+which will run <code>./start.js</code> in <a href="https://github.com/nodejitsu/forever">a reliable way</a>.</p>
+<p>You can use environment variables to control runtime options, or put them in your config
+file in the <code>server</code> section.</p>
+<p>You&#39;ll need to have <a href="http://nodejs.org/">nodejs</a> installed.  Anything in the 0.8.x series or above should work
+fine.  We recommend using <a href="https://github.com/creationix/nvm">nvm</a>, as it gives you an extra dimention
+of flexability, but using your system&#39;s package manager should work just as well.</p>
+<pre><code class="lang-bash"># In the project directory:
+
+npm install
+PORT=3333 APP_ROOT=bucky/ ./start.js</code></pre>
+<p>The <code>APP_ROOT</code> (or <code>config.server.appRoot</code>) will prefix all endpoints.</p>
+<p>Bucky will respond to all requests at <code>/APP_ROOT/health-check</code>, if you need a health check url.</p>
+<p>Bucky can be setup to receive data at multiple endpoints, but by default it listens
+to <code>/APP_ROOT/send</code> on whichever port you specify.</p>
+<h4>Ubuntu (12.04)</h4>
+<pre><code class="lang-bash"># Install nodejs
+# This assumes you&#39;re on a 64 bit machine
+wget http://nodejs.org/dist/v0.10.19/node-v0.10.19-linux-x64.tar.gz
+tar xvf node-v0.10.19-linux-x64.tar.gz 
+sudo ln -s `pwd`/node-v0.10.19-linux-x64/bin/{node,npm} /usr/local/bin/
+
+# Grab a Bucky release
+# You should use the latest release available at https://github.com/HubSpot/BuckyServer/releases
+wget https://github.com/HubSpot/BuckyServer/archive/v0.2.0.tar.gz -O BuckyServer.tar.gz
+tar xvf BuckyServer.tar.gz
+cd BuckyServer
+
+# Install Bucky
+sudo npm install -g
+
+# Make any config changes by editing /usr/local/lib/node_modules/bucky-server/config/default.yaml
+
+# You can start bucky by running bucky-server
+
+# Add the upstart script so Bucky starts on startup and respawns
+sudo cp init/bucky-server.conf /etc/init/
+
+# Start Bucky with
+sudo start bucky-server
+
+# Log files will appear in /var/log/bucky.log by default</code></pre>
+<p>You can run bucky on a specific port (make sure to open that port in your security group
+if you&#39;re using EC2), or you can use a reverse proxy like Nginx or HAProxy to serve it
+on the same domain and port as your website, it&#39;s up to you.</p>
+<h2>Configuring</h2>
+<p>If you&#39;re not already running a stats collection service, you should take a look at our
+<a href="docs/start-no-stats.md">help doc</a>.</p>
+<p>Most people will only need to specify <a href="config/default.yaml">the config</a> they&#39;re interested in
+and start up the server.</p>
+<p>If you need more customization, you can write a module:</p>
+<h3>Modules</h3>
+<p>There are a few of types of modules:</p>
+<ul>
+<li><p>Logger</p>
+<p>Use to have Bucky log to something other than the console</p>
+</li>
+<li><p>Config</p>
+<p>Use to have Bucky pull config from somewhere other than the default file</p>
+</li>
+<li><p>App</p>
+<p>Use to do things when Bucky loads and/or on requests.  Auth, monitoring initialization, etc.</p>
+</li>
+<li><p>Collectors</p>
+<p>Use to send Bucky data to new and exciting places.</p>
+</li>
+</ul>
+<p>We can only have one logger and one config, but you can specify as many app and collector modules
+as you like.</p>
+<p>All modules follow the same basic sketch.  You export a method which is called when Bucky
+starts up.  That method is provided with as much of <code>{app, config, logger}</code> as we have
+loaded so far, and is expected to call a callback when it&#39;s ready for the loading to continue.</p>
+<h4>Logger</h4>
+<p>Used to log output.  Defaults to a wrapper around console.log/console.error.</p>
+<p>Should export a function which will be called when the server is started:</p>
+<pre><code class="lang-coffeescript">module.exports = ({logger}, next) -&gt;
+  # logger is the previous logger (just the console)
+
+  next myNewLogger</code></pre>
+<p>This function should call the callback with a logger object which implements
+<code>log</code> and <code>error</code>:</p>
+<pre><code class="lang-coffeescript">module.exports = ({logger}, next) -&gt;
+  myNewLogger = {
+    log: -&gt;
+      console.log &quot;Bucky message:&quot;, arguments...
+    error: -&gt;
+      console.error &quot;Bucky error:&quot;, arguments...
+  }
+
+  next myNewLogger</code></pre>
+<h4>Config</h4>
+<p>By default config comes from the config files loaded using the node <code>config</code> module.</p>
+<p>If specified, this module will replace that config.  Please note that the list of
+modules comes from the <code>config</code> module, so the list of modules must always be
+specified there.  All other config options can be moved to your config solution
+of choice using this extension point.</p>
+<p>At HubSpot, we&#39;re believers in config which can be changed without restarting
+services. For this reason, the config api is a bit more complex than you might
+expect.  A wrapper is provided in <code>lib/configWrapper.coffee</code> for you to use
+should you wish to use a simpler solution.</p>
+<pre><code class="lang-coffeescript">module.exports = ({config, logger}, next) -&gt;
+  # config is the old config which was being used
+  # before this module was loaded
+
+  # logger.log and logger.error should be used rather than
+  # console
+
+  next myConfigObject</code></pre>
+<p>A config value will be retrieved from the config object the callback is
+called with like this:</p>
+<pre><code class="lang-coffeescript">  config.get(&#39;some.config&#39;).get()
+
+  config.get(&#39;some.config&#39;).on &#39;change&#39;, -&gt;
+    # The config changed!</code></pre>
+<p>You are free to implement the <code>on</code> method as a dud if live reloading doesn&#39;t
+make sense using your config system.  Take a look at <a href="lib/configWrapper.coffee">lib/configWrapper.coffee</a>
+for an example of how a basic object can be converted (and feel free to use it).</p>
+<h4>App</h4>
+<p>App modules get loaded once, and can optionally provide a function to be ran with each request.</p>
+<p>Simple app modules are a good place to put any server config, initialization code, etc.</p>
+<p>We use app modules to make <a href="modules/trustProxy.coffee">little tweaks</a> to how express works and enable
+monitoring.</p>
+<p>App modules are called at initialize-time with a hash including a reference to the express app:</p>
+<pre><code class="lang-coffeescript">module.exports = ({app, logger, config}, next) -&gt;</code></pre>
+<p>If your app module calls the callback with a function, that function will be executed on all requests to
+<code>/send</code>, which is the default endpoint.</p>
+<p>If the callback is called with a hash, it is expected to be a mapping between endpoints and handler functions.</p>
+<pre><code class="lang-coffeescript">module.exports = ({app, logger, config}, next) -&gt;
+  next
+    send: (req, res, _next) -&gt;
+      # Standard express request handling stuff in here
+
+    someOtherEndpoint: (req, res, _next) -&gt;
+       # Will get requests which are sent to /someOtherEndpoint</code></pre>
+<p>These functions work like middleware, they are called sequentially.  You can use them to implement
+things like <a href="modules/auth.coffee">auth</a> if you need it.</p>
+<h4>Collectors</h4>
+<p>It&#39;s not a standard type of module (the core of Bucky has no idea about it), but the default
+<a href="modules/collectors.coffee">collectors app module</a> looks to a fourth type of module to know
+where to send data.</p>
+<p><a href="modules/statsd.coffee">Statsd</a> and <a href="modules/openTSDB.coffee">OpenTSDB</a> collectors are included.</p>
+<p>Collectors should export a function which is called on initialize, and call the callback with a hash
+mapping endpoints to handlers.</p>
+<pre><code class="lang-coffeescript">module.exports = ({app, logger, config}, next) -&gt;
+  next
+    send: (data) -&gt;
+      # This collector will receive any requests to /send (the default endpoint)
+
+      logger.log &quot;We got some data!&quot;</code></pre>
