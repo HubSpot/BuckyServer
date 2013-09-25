@@ -2,7 +2,8 @@
   "name": "bucky-server",
   "version": "0.1.0",
   "description": "Server to collect stats from the client",
-  "main": "start.js",
+  "main": "./start.js",
+  "bin": "./start.js",
   "scripts": {
     "start": "./start.js"
   },
@@ -15,7 +16,7 @@
     "Ze'ev Klapow <zklapow@hubspot.com>"
   ],
   "engines": {
-    "node": "0.10.x"
+    "node": ">=0.8.15"
   },
   "dependencies": {
     "yaml": "~0.2.3",

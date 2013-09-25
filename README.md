@@ -52,6 +52,41 @@ Bucky will respond to all requests at `/APP_ROOT/health-check`, if you need a he
 Bucky can be setup to receive data at multiple endpoints, but by default it listens
 to `/APP_ROOT/send` on whichever port you specify.
 
+#### Ubuntu (12.04)
+
+```bash
+# Install nodejs
+# This assumes you're on a 64 bit machine
+wget http://nodejs.org/dist/v0.10.19/node-v0.10.19-linux-x64.tar.gz
+tar xvf node-v0.10.19-linux-x64.tar.gz 
+sudo ln -s `pwd`/node-v0.10.19-linux-x64/bin/{node,npm} /usr/local/bin/
+
+# Grab a Bucky release
+# You should use the latest release available at https://github.com/HubSpot/BuckyServer/releases
+wget https://github.com/HubSpot/BuckyServer/archive/v0.2.0.tar.gz -O BuckyServer.tar.gz
+tar xvf BuckyServer.tar.gz
+cd BuckyServer
+
+# Install Bucky
+sudo npm install -g
+
+# Make any config changes by editing /usr/local/lib/node_modules/bucky-server/config/default.yaml
+
+# You can start bucky by running bucky-server
+
+# Add the upstart script so Bucky starts on startup and respawns
+sudo cp init/bucky-server.conf /etc/init/
+
+# Start Bucky with
+sudo start bucky-server
+
+# Log files will appear in /var/log/bucky.log by default
+```
+
+You can run bucky on a specific port (make sure to open that port in your security group
+if you're using EC2), or you can use a reverse proxy like Nginx or HAProxy to serve it
+on the same domain and port as your website, it's up to you.
+
 ## Configuring
 
 If you're not already running a stats collection service, you should take a look at our
