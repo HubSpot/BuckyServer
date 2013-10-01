@@ -4,7 +4,6 @@ Q = require 'q'
 _ = require 'underscore'
 express = require 'express'
 config = require 'config'
-jsonMiddleware = require 'connect/lib/middleware/json'
 
 configWrapper = require './lib/configWrapper'
 load = require './lib/load'
@@ -24,15 +23,29 @@ loadConfig = (logger) ->
   else
     configWrapper(config)
 
+parser = (req, res, next) ->
+  buf = ''
+  req.body = {}
+
+  req.setEncoding 'utf8'
+
+  req.on 'data', (chunk) ->
+    buf += chunk
+
+  req.on 'end', ->
+    metrics = buf.split('\n')
+
+    for metric in metrics
+      [name, value] = metric.split(':')
+
+      if name and value
+        req.body[name] = value
+
+    next()
+
 loadApp = (logger, config) ->
   app = express()
      
-  # We need to always parse the body as json, as when we make
-  # a request from IE8 with XDomainRequest, we can't set the
-  # content-type to application/json.
-  jsonMiddleware.regexp = /.*/
-  app.use jsonMiddleware()
-
   APP_ROOT = process.env.APP_ROOT ? config.server?.appRoot ? ''
 
   moduleGroups = {}
@@ -71,7 +84,7 @@ loadApp = (logger, config) ->
         _routes = {send: _routes}
 
       for path, handler of _routes
-        route = "#{ APP_ROOT }/#{ path }"
+        route = "#{ APP_ROOT }/v1/#{ path }"
         if not routes[route]?
           routes[route] = [handler]
         else
@@ -79,7 +92,7 @@ loadApp = (logger, config) ->
 
     for path, handlers of routes
       # Bind all request modules as middleware and install the collectors
-      app.post path, handlers...
+      app.post path, parser, handlers...
 
       app.options path, (req, res) ->
         # CORS support
@@ -91,7 +104,7 @@ loadApp = (logger, config) ->
 
         res.send 200, ''
 
-    app.get "#{ APP_ROOT }/health-check", (req, res) ->
+    app.get "#{ APP_ROOT }/v1/health-check", (req, res) ->
       res.send('OK\n')
 
     port = process.env.PORT ? config.server?.port ? 5000

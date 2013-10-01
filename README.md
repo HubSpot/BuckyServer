@@ -3,7 +3,7 @@
 Bucky uses a Node server to forward the HTTP requests with your monitoring data to
 Statsd/Graphite, OpenTSDB, or whatever other service you'd like.
 
-Also see the [Bucky Client](http://github.hubspot.com/BuckyClient/) for js.
+Also see the [Bucky Client](http://github.hubspot.com/BuckyClient/).
 
 ## Hosting
 
@@ -47,10 +47,10 @@ PORT=3333 APP_ROOT=bucky/ ./start.js
 
 The `APP_ROOT` (or `config.server.appRoot`) will prefix all endpoints.
 
-Bucky will respond to all requests at `/APP_ROOT/health-check`, if you need a health check url.
+Bucky will respond to all requests at `/APP_ROOT/v1/health-check`, if you need a health check url.
 
 Bucky can be setup to receive data at multiple endpoints, but by default it listens
-to `/APP_ROOT/send` on whichever port you specify.
+to `/APP_ROOT/v1/send` on whichever port you specify.
 
 #### Ubuntu (12.04)
 
@@ -205,7 +205,7 @@ module.exports = ({app, logger, config}, next) ->
 ```
 
 If your app module calls the callback with a function, that function will be executed on all requests to
-`/send`, which is the default endpoint.
+`/v1/send`, which is the default endpoint.
 
 If the callback is called with a hash, it is expected to be a mapping between endpoints and handler functions.
 
@@ -216,7 +216,7 @@ module.exports = ({app, logger, config}, next) ->
       # Standard express request handling stuff in here
 
     someOtherEndpoint: (req, res, _next) ->
-       # Will get requests which are sent to /someOtherEndpoint
+       # Will get requests which are sent to /v1/someOtherEndpoint
 ```
 
 These functions work like middleware, they are called sequentially.  You can use them to implement
@@ -237,7 +237,24 @@ mapping endpoints to handlers.
 module.exports = ({app, logger, config}, next) ->
   next
     send: (data) ->
-      # This collector will receive any requests to /send (the default endpoint)
+      # This collector will receive any requests to /v1/send (the default endpoint)
 
       logger.log "We got some data!"
 ```
+
+### Format
+
+If you are interested in writing new clients, the format of metric data is the same as is used by statsd:
+
+```
+<metric name>:<metric value>|<unit>[@<sample rate>]
+```
+
+For example:
+
+```
+my.awesome.metric:35|ms
+some.other.metric:3|c@0.5
+```
+
+All requests are sent with content-type `text/plain`.
