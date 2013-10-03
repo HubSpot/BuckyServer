@@ -29,10 +29,10 @@ increment the version of the application whenever you deploy.
 ### EC2 / Bare Metal
 
 If you'd rather host Bucky on EC2 directly or on raw hardware, you just need something
-which will run `./start.js` in [a reliable way](https://github.com/nodejitsu/forever).
+which will run `./start.js` in a reliable way.
 
-You can use environment variables to control runtime options, or put them in your config
-file in the `server` section.
+You can use environment variables to control runtime options, or put them in your [config file](config/default.yaml)
+in the `server` section.
 
 You'll need to have [nodejs](http://nodejs.org/) installed.  Anything in the 0.8.x series or above should work
 fine.  We recommend using [nvm](https://github.com/creationix/nvm), as it gives you an extra dimention
