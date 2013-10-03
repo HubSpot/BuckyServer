@@ -1,3 +1,6 @@
+Choosing a Metrics Server
+=========================
+
 If you don't already have a stats platform, this is a great opportunity
 for you to start learning more about what is going on in your system.
 
