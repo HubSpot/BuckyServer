@@ -90,7 +90,7 @@ on the same domain and port as your website, it's up to you.
 ## Configuring
 
 If you're not already running a stats collection service, you should take a look at our
-[help doc](docs/start-no-stats.md).
+[help doc](http://github.hubspot.com/BuckyServer/getting_started/choosing_a_stats_service/).
 
 Most people will only need to specify [the config](config/default.yaml) they're interested in
 and start up the server.
