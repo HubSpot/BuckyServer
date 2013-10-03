@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="chrome=1"><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>BuckyServer</title><link rel="icon" href="http://static.hubspot.com/favicon.ico"><link rel="stylesheet" href="https://static2cdn.hubspot.com/hubspot_public_assets/static-1.112/shared/sass/hubspot_public_assets.css"><link rel="stylesheet" href="https://static.hubspot.com/bundles/navigation.css"><link rel="stylesheet" href="/static-resources/css/print.css"><link rel="stylesheet" href="/static-resources/css/highlight-theme-github.css"><link rel="stylesheet" href="/static-resources/css/navigation-tweaks.css"><link rel="stylesheet" href="/static-resources/css/documentation.css"><script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script><link rel="stylesheet" href="/BuckyServer//resources/executr/lib/CodeMirror/codemirror.css"><link rel="stylesheet" href="/BuckyServer//resources/executr/build/css/executr.css"><script src="/BuckyServer//resources/executr/lib/CodeMirror/codemirror.js"></script><script src="/BuckyServer//resources/executr/lib/CodeMirror/mode/coffeescript/coffeescript.js"></script><script src="/BuckyServer//resources/executr/lib/CodeMirror/mode/javascript/javascript.js"></script><script src="/BuckyServer//resources/executr/lib/coffee-script.js"></script><script src="/BuckyServer//resources/executr/lib/underscore.min.js"></script><script src="/BuckyServer//resources/executr/lib/js2coffee.min.js"></script><script src="/BuckyServer//resources/executr/build/js/executr.js"></script><script src="/BuckyServer//resources/executr/build/js/executr-run.js"></script><script src="//use.typekit.net/jbn8qxr.js"></script><script>try{Typekit.load();}catch(e){}
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="chrome=1"><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Bucky Server</title><link rel="icon" href="http://static.hubspot.com/favicon.ico"><link rel="stylesheet" href="https://static2cdn.hubspot.com/hubspot_public_assets/static-1.112/shared/sass/hubspot_public_assets.css"><link rel="stylesheet" href="https://static.hubspot.com/bundles/navigation.css"><link rel="stylesheet" href="/static-resources/css/print.css"><link rel="stylesheet" href="/static-resources/css/highlight-theme-github.css"><link rel="stylesheet" href="/static-resources/css/navigation-tweaks.css"><link rel="stylesheet" href="/static-resources/css/documentation.css"><script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script><link rel="stylesheet" href="/BuckyServer//resources/executr/lib/CodeMirror/codemirror.css"><link rel="stylesheet" href="/BuckyServer//resources/executr/build/css/executr.css"><script src="/BuckyServer//resources/executr/lib/CodeMirror/codemirror.js"></script><script src="/BuckyServer//resources/executr/lib/CodeMirror/mode/coffeescript/coffeescript.js"></script><script src="/BuckyServer//resources/executr/lib/CodeMirror/mode/javascript/javascript.js"></script><script src="/BuckyServer//resources/executr/lib/coffee-script.js"></script><script src="/BuckyServer//resources/executr/lib/underscore.min.js"></script><script src="/BuckyServer//resources/executr/lib/js2coffee.min.js"></script><script src="/BuckyServer//resources/executr/build/js/executr.js"></script><script src="/BuckyServer//resources/executr/build/js/executr-run.js"></script><script src="//use.typekit.net/jbn8qxr.js"></script><script>try{Typekit.load();}catch(e){}
 </script></head><body><div id="hs-nav-v3" class="nav-width-flex signed-out-nav">
     <div class="hs-nav-section main-nav">
         <div class="nav-section-inner">
@@ -23,9 +23,10 @@
         </div>
     </div>
 </div>
-<div class="hs-page-width-normal"><div class="row-fluid"><div class="span6"><h1 class="hs-doc-page-header"><a class="hs-doc-homepage-link" href="">BuckyServer</a></h1></div><div class="span6 hidden-phone"><div class="hs-doc-slim-github-link-wrapper"><a class="hs-doc-slim-github-link" href="http://github.com/HubSpot/BuckyServer">On GitHub</a></div></div></div></div><div class="hs-page-width-normal"><div class="row-fluid"><div class="span3"><div class="hs-doc-sidenav"><nav><ul class="hs-public-sidenav"><li class=""><a href="">Home</a></li></ul></nav></div></div><div class="span9"><div class="hs-doc-content"><h2>Bucky Server</h2>
+<div class="hs-page-width-normal"><div class="row-fluid"><div class="span6"><h1 class="hs-doc-page-header"><a class="hs-doc-homepage-link" href="../">Bucky Server</a></h1></div><div class="span6 hidden-phone"><div class="hs-doc-slim-github-link-wrapper"><a class="hs-doc-slim-github-link" href="http://github.com/HubSpot/BuckyServer">On GitHub</a></div></div></div></div><div class="hs-page-width-normal"><div class="row-fluid"><div class="span3"><div class="hs-doc-sidenav"><nav><ul class="hs-public-sidenav"><li class=""><a href="../">Home</a></li><li><b>Getting Started</b></li><li class=""><a href="../getting_started/choosing_a_stats_service">Choosing a Stats Service</a></li></ul></nav></div></div><div class="span9"><div class="hs-doc-content"><h2>Bucky Server</h2>
 <p>Bucky uses a Node server to forward the HTTP requests with your monitoring data to
 Statsd/Graphite, OpenTSDB, or whatever other service you&#39;d like.</p>
+<p>Also see the <a href="http://github.hubspot.com/BuckyClient/">Bucky Client</a>.</p>
 <h2>Hosting</h2>
 <p>Everything you need to run Bucky on Heroku or Nodejitsu is included, just update the
 <a href="config/default.yaml">config file</a> and push to the service of your choice.</p>
@@ -38,9 +39,9 @@ git push heroku master</code></pre>
 increment the version of the application whenever you deploy.</p>
 <h3>EC2 / Bare Metal</h3>
 <p>If you&#39;d rather host Bucky on EC2 directly or on raw hardware, you just need something
-which will run <code>./start.js</code> in <a href="https://github.com/nodejitsu/forever">a reliable way</a>.</p>
-<p>You can use environment variables to control runtime options, or put them in your config
-file in the <code>server</code> section.</p>
+which will run <code>./start.js</code> in a reliable way.</p>
+<p>You can use environment variables to control runtime options, or put them in your <a href="config/default.yaml">config file</a>
+in the <code>server</code> section.</p>
 <p>You&#39;ll need to have <a href="http://nodejs.org/">nodejs</a> installed.  Anything in the 0.8.x series or above should work
 fine.  We recommend using <a href="https://github.com/creationix/nvm">nvm</a>, as it gives you an extra dimention
 of flexability, but using your system&#39;s package manager should work just as well.</p>
@@ -49,30 +50,52 @@ of flexability, but using your system&#39;s package manager should work just as 
 npm install
 PORT=3333 APP_ROOT=bucky/ ./start.js</code></pre>
 <p>The <code>APP_ROOT</code> (or <code>config.server.appRoot</code>) will prefix all endpoints.</p>
-<p>Bucky will respond to all requests at <code>/APP_ROOT/health-check</code>, if you need a health check url.</p>
+<p>Bucky will respond to all requests at <code>/APP_ROOT/v1/health-check</code>, if you need a health check url.</p>
 <p>Bucky can be setup to receive data at multiple endpoints, but by default it listens
-to <code>/APP_ROOT/send</code> on whichever port you specify.</p>
+to <code>/APP_ROOT/v1/send</code> on whichever port you specify.</p>
+<h4>Ubuntu (12.04)</h4>
+<pre><code class="lang-bash"><span class="comment"># Install nodejs</span>
+<span class="comment"># This assumes you're on a 64 bit machine</span>
+wget http://nodejs.org/dist/v0.10.19/node-v0.10.19-linux-x64.tar.gz
+tar xvf node-v0.10.19-linux-x64.tar.gz 
+sudo ln -s `pwd`/node-v0.10.19-linux-x64/bin/{node,npm} /usr/local/bin/
+
+<span class="comment"># Grab a Bucky release</span>
+<span class="comment"># You should use the latest release available at https://github.com/HubSpot/BuckyServer/releases</span>
+wget https://github.com/HubSpot/BuckyServer/archive/v0.2.0.tar.gz -O BuckyServer.tar.gz
+tar xvf BuckyServer.tar.gz
+cd BuckyServer
+
+<span class="comment"># Install Bucky</span>
+sudo npm install -g
+
+<span class="comment"># Make any config changes by editing /usr/local/lib/node_modules/bucky-server/config/default.yaml</span>
+
+<span class="comment"># You can start bucky by running bucky-server</span>
+
+<span class="comment"># Add the upstart script so Bucky starts on startup and respawns</span>
+sudo cp init/bucky-server.conf /etc/init/
+
+<span class="comment"># Start Bucky with</span>
+sudo start bucky-server
+
+<span class="comment"># Log files will appear in /var/log/bucky.log by default</span></code></pre>
+<p>You can run bucky on a specific port (make sure to open that port in your security group
+if you&#39;re using EC2), or you can use a reverse proxy like Nginx or HAProxy to serve it
+on the same domain and port as your website, it&#39;s up to you.</p>
 <h2>Configuring</h2>
 <p>If you&#39;re not already running a stats collection service, you should take a look at our
-<a href="docs/start-no-stats.md">help doc</a>.</p>
+<a href="http://github.hubspot.com/BuckyServer/getting_started/choosing_a_stats_service/">help doc</a>.</p>
 <p>Most people will only need to specify <a href="config/default.yaml">the config</a> they&#39;re interested in
 and start up the server.</p>
 <p>If you need more customization, you can write a module:</p>
 <h3>Modules</h3>
 <p>There are a few of types of modules:</p>
 <ul>
-<li><p>Logger</p>
-<p>Use to have Bucky log to something other than the console</p>
-</li>
-<li><p>Config</p>
-<p>Use to have Bucky pull config from somewhere other than the default file</p>
-</li>
-<li><p>App</p>
-<p>Use to do things when Bucky loads and/or on requests.  Auth, monitoring initialization, etc.</p>
-</li>
-<li><p>Collectors</p>
-<p>Use to send Bucky data to new and exciting places.</p>
-</li>
+<li>Logger - Use to have Bucky log to something other than the console</li>
+<li>Config - Use to have Bucky pull config from somewhere other than the default file</li>
+<li>App - Use to do things when Bucky loads and/or on requests.  Auth, monitoring initialization, etc.</li>
+<li>Collectors - Use to send Bucky data to new and exciting places.</li>
 </ul>
 <p>We can only have one logger and one config, but you can specify as many app and collector modules
 as you like.</p>
@@ -103,8 +126,8 @@ loaded so far, and is expected to call a callback when it&#39;s ready for the lo
 modules comes from the <code>config</code> module, so the list of modules must always be
 specified there.  All other config options can be moved to your config solution
 of choice using this extension point.</p>
-<p>At HubSpot, we use a config solution which supports live reloading of config
-values.  For this reason, the config api is a bit more complex than you might
+<p>At HubSpot, we&#39;re believers in config which can be changed without restarting
+services. For this reason, the config api is a bit more complex than you might
 expect.  A wrapper is provided in <code>lib/configWrapper.coffee</code> for you to use
 should you wish to use a simpler solution.</p>
 <pre><code class="lang-coffeescript">module.<span class="function"><span class="title">exports</span></span> = ({config, logger}, next) -&gt;
@@ -132,7 +155,7 @@ monitoring.</p>
 <p>App modules are called at initialize-time with a hash including a reference to the express app:</p>
 <pre><code class="lang-coffeescript">module.<span class="function"><span class="title">exports</span></span> = ({app, logger, config}, next) -&gt;</code></pre>
 <p>If your app module calls the callback with a function, that function will be executed on all requests to
-<code>/send</code>, which is the default endpoint.</p>
+<code>/v1/send</code>, which is the default endpoint.</p>
 <p>If the callback is called with a hash, it is expected to be a mapping between endpoints and handler functions.</p>
 <pre><code class="lang-coffeescript">module.<span class="function"><span class="title">exports</span></span> = ({app, logger, config}, next) -&gt;
   next
@@ -140,7 +163,7 @@ monitoring.</p>
       <span class="comment"># Standard express request handling stuff in here</span>
 
     someOtherEndpoint: (req, res, _next) -&gt;
-       <span class="comment"># Will get requests which are sent to /someOtherEndpoint</span></code></pre>
+       <span class="comment"># Will get requests which are sent to /v1/someOtherEndpoint</span></code></pre>
 <p>These functions work like middleware, they are called sequentially.  You can use them to implement
 things like <a href="modules/auth.coffee">auth</a> if you need it.</p>
 <h4>Collectors</h4>
@@ -153,9 +176,16 @@ mapping endpoints to handlers.</p>
 <pre><code class="lang-coffeescript">module.<span class="function"><span class="title">exports</span></span> = ({app, logger, config}, next) -&gt;
   next
     send: (data) -&gt;
-      <span class="comment"># This collector will receive any requests to /send (the default endpoint)</span>
+      <span class="comment"># This collector will receive any requests to /v1/send (the default endpoint)</span>
 
       logger.log <span class="string">"We got some data!"</span></code></pre>
+<h3>Format</h3>
+<p>If you are interested in writing new clients, the format of metric data is the same as is used by statsd:</p>
+<pre><code><span class="tag">&lt;<span class="title">metric</span> <span class="attribute">name</span>&gt;</span>:<span class="tag">&lt;<span class="title">metric</span> <span class="attribute">value</span>&gt;</span>|<span class="tag">&lt;<span class="title">unit</span>&gt;</span>[@<span class="tag">&lt;<span class="title">sample</span> <span class="attribute">rate</span>&gt;</span>]</code></pre>
+<p>For example:</p>
+<pre><code>my<span class="variable">.awesome</span><span class="variable">.metric</span>:<span class="number">35</span>|ms
+some<span class="variable">.other</span><span class="variable">.metric</span>:<span class="number">3</span>|c@<span class="number">0.5</span></code></pre>
+<p>All requests are sent with content-type <code>text/plain</code>.</p>
 </div></div></div></div><div class="hs3-public-footer"><div class="row-fluid hs-page-width-normal"><div class="span3 hidden-phone"><h3>HubSpot</h3><ul><li><a href="http://www.hubspot.com">Home</a></li><li><a href="http://www.hubspot.com/software">Products</a></li><li><a href="http://www.hubspot.com/internet-marketing-company/">About</a></li></ul></div><div class="span3"><h3>Projects</h3><ul><li><a href="http://github.hubspot.com/messenger">Messenger</a></li><li><a href="http://github.hubspot.com/facewall">Facewall</a></li><li><a href="http://github.hubspot.com/jquery-zoomer">jQuery Zoomer</a></li><li><a href="http://github.hubspot.com/humanize">Humanize</a></li><li><a href="http://github.hubspot.com/teeble">Teeble</a></li></ul></div><div class="span3"><h3>Development Team</h3><ul><li><a href="http://dev.hubspot.com">Home</a></li><li><a href="http://dev.hubspot.com/teams">Teams</a></li><li><a href="http://dev.hubspot.com/people">People</a></li><li><a href="http://dev.hubspot.com/jobs">Jobs</a></li></ul></div><div class="span3 hidden-phone"><h3>Developer API</h3><ul><li><a href="http://developers.hubspot.com/">Developer Documentation</a></li></ul></div></div></div><!-- Start of Async HubSpot Analytics Code -->
 <script type="text/javascript">
     (function(d,s,i,r) {
