@@ -43,10 +43,10 @@ parser = (req, res, next) ->
 
     next()
 
-loadApp = (logger, config) ->
+loadApp = (logger, loadedConfig) ->
   app = express()
      
-  APP_ROOT = process.env.APP_ROOT ? config.server?.appRoot ? ''
+  APP_ROOT = process.env.APP_ROOT ? loadedConfig.server?.appRoot ? ''
 
   moduleGroups = {}
   loadModuleGroup = (group) ->
@@ -57,7 +57,7 @@ loadApp = (logger, config) ->
         logger.log "Loading #{ group } Module", name
 
         try
-          promise = load name, {logger, config, app}
+          promise = load name, {logger, app, config: loadedConfig}
         catch e
           console.log "Error loading module", e?.stack
 
@@ -107,7 +107,7 @@ loadApp = (logger, config) ->
     app.get "#{ APP_ROOT }/v1/health-check", (req, res) ->
       res.send('OK\n')
 
-    port = process.env.PORT ? config.server?.port ? 5000
+    port = process.env.PORT ? loadedConfig.server?.port ? 5000
     app.listen(port)
 
     logger.log('Server listening on port %d in %s mode', port, app.settings.env)
@@ -115,7 +115,7 @@ loadApp = (logger, config) ->
 Q.when(loadLogger()).then (logger) ->
 
   logger.log "Loading Config"
-  Q.when(loadConfig(logger)).then (config) ->
+  Q.when(loadConfig(logger)).then (loadedConfig) ->
 
     logger.log "Loading App"
-    loadApp(logger, config)
+    loadApp(logger, loadedConfig)
