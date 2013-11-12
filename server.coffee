@@ -46,7 +46,7 @@ parser = (req, res, next) ->
 loadApp = (logger, loadedConfig) ->
   app = express()
      
-  APP_ROOT = process.env.APP_ROOT ? loadedConfig.server?.appRoot ? ''
+  APP_ROOT = process.env.APP_ROOT ? loadedConfig.get('server.appRoot').get() ? ''
 
   moduleGroups = {}
   loadModuleGroup = (group) ->
@@ -107,7 +107,7 @@ loadApp = (logger, loadedConfig) ->
     app.get "#{ APP_ROOT }/v1/health-check", (req, res) ->
       res.send('OK\n')
 
-    port = process.env.PORT ? loadedConfig.server?.port ? 5000
+    port = process.env.PORT ? loadedConfig.get('server.port').get() ? 5000
     app.listen(port)
 
     logger.log('Server listening on port %d in %s mode', port, app.settings.env)
