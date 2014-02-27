@@ -35,8 +35,8 @@ You can use environment variables to control runtime options, or put them in you
 in the `server` section.
 
 You'll need to have [nodejs](http://nodejs.org/) installed.  Anything in the 0.8.x series or above should work
-fine.  We recommend using [nvm](https://github.com/creationix/nvm), as it gives you an extra dimention
-of flexability, but using your system's package manager should work just as well.
+fine.  We recommend using [nvm](https://github.com/creationix/nvm), as it gives you an extra dimension
+of flexibility, but using your system's package manager should work just as well.
 
 ```bash
 # In the project directory:
