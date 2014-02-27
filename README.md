@@ -63,7 +63,7 @@ sudo ln -s `pwd`/node-v0.10.19-linux-x64/bin/{node,npm} /usr/local/bin/
 
 # Grab a Bucky release
 # You should use the latest release available at https://github.com/HubSpot/BuckyServer/releases
-wget https://github.com/HubSpot/BuckyServer/archive/v0.2.0.tar.gz -O BuckyServer.tar.gz
+wget https://github.com/HubSpot/BuckyServer/archive/v0.3.0.tar.gz -O BuckyServer.tar.gz
 tar xvf BuckyServer.tar.gz
 cd BuckyServer
 
