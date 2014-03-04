@@ -1,6 +1,6 @@
 server:
   port: 5999
-  appRoot: "bucky"
+  appRoot: "/bucky"
 
 statsd:
   host: 'localhost'
