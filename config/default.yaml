@@ -10,6 +10,13 @@ opentsdb:
   host: 'localhost'
   port: 4242
 
+influxdb:
+  host: 'localhost'
+  port: 8086
+  database: 'bucky'
+  username: 'root'
+  password: 'root'
+
 modules:
   # The modules just get require'd in, so they don't have to be in the Bucky project.
   app:
@@ -22,3 +29,4 @@ modules:
     - ./modules/collectionLogger
     - ./modules/statsd
     - ./modules/openTSDB
+    - ./modules/influxdb
