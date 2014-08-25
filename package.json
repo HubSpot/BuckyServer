@@ -1,6 +1,6 @@
 {
   "name": "bucky-server",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Server to collect stats from the client",
   "main": "./start.js",
   "bin": "./start.js",
