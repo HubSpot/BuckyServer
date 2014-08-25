@@ -49,7 +49,7 @@ class Client
       data.push
         name: key,
         columns: ['value'],
-        points: [[val]]
+        points: [[parseFloat val]]
 
     JSON.stringify data
 
