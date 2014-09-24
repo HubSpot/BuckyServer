@@ -13,7 +13,10 @@ class Client
   write: (metrics) ->
     data = []
     for key, desc of metrics
-      [val, unit, sample] = @parseRow desc
+      row = @parseRow desc
+      continue unless row
+
+      [val, unit, sample] = row
 
       data.push {key: key, val: val, tags: {source: 'bucky'}}
 
