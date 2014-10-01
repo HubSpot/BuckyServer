@@ -4,6 +4,7 @@ Q = require 'q'
 _ = require 'underscore'
 express = require 'express'
 config = require 'config'
+cluster = require 'cluster'
 
 configWrapper = require './lib/configWrapper'
 load = require './lib/load'
@@ -22,13 +23,13 @@ loadConfig = (logger) ->
     load(MODULES.config, {config, logger})
   else
     configWrapper(config)
-    
+
 setCORSHeaders = (req, res, next) ->
   res.setHeader 'Access-Control-Allow-Origin', '*'
   res.setHeader 'Access-Control-Allow-Methods', 'POST'
   res.setHeader 'Access-Control-Max-Age', '604800'
   res.setHeader 'Access-Control-Allow-Credentials', 'true'
-  
+
   next()
 
 parser = (req, res, next) ->
@@ -53,7 +54,7 @@ parser = (req, res, next) ->
 
 loadApp = (logger, loadedConfig) ->
   app = express()
-     
+
   APP_ROOT = process.env.APP_ROOT ? loadedConfig.get('server.appRoot').get() ? ''
 
   moduleGroups = {}
@@ -109,6 +110,7 @@ loadApp = (logger, loadedConfig) ->
       res.send('OK\n')
 
     port = process.env.PORT ? loadedConfig.get('server.port').get() ? 5000
+    port = (port + cluster.worker.id - 1) if process.env.CLUSTER && cluster.isWorker
     app.listen(port)
 
     logger.log('Server listening on port %d in %s mode', port, app.settings.env)
