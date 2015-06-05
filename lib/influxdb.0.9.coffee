@@ -53,6 +53,8 @@ class Client
         name: key
         fields:
           value: parseFloat val
+          unit: unit
+          sample: sample
     #@logger.log(JSON.stringify(data, null, 2))
     JSON.stringify data
 
