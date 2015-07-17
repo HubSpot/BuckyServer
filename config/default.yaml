@@ -18,6 +18,9 @@ influxdb:
   password: 'root'
   use_udp: false
   retentionPolicy: 'default'
+  # Set legacy to true if you're using influxdb 0.8, for 0.9+ set legacy to false
+  legacy: false
+
 
 modules:
   # The modules just get require'd in, so they don't have to be in the Bucky project.
@@ -29,8 +32,7 @@ modules:
 
   collectors:
   # Uncomment the modules that you'd like to use
-    - ./modules/collectionLogger
+    # - ./modules/collectionLogger
     # - ./modules/statsd
     # - ./modules/openTSDB
     # - ./modules/influxdb
-    # - ./modules/influxdb.0.9
