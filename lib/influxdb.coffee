@@ -14,14 +14,14 @@ class Client
     @send @metricsJson metrics
 
   sendHTTP: ->
-    legacy = @config.get('influxdb.legacy').get() ? false
+    version = @config.get('influxdb.version').get() ? '0.9'
     host = @config.get('influxdb.host').get() ? 'localhost'
     port = @config.get('influxdb.port').get() ? 8086
     database = @config.get('influxdb.database').get() ? 'bucky'
     username = @config.get('influxdb.username').get() ? 'root'
     password = @config.get('influxdb.password').get() ? 'root'
     logger = @logger
-    if legacy
+    if version == '0.8'
       endpoint = 'http://' + host + ':' + port + '/db/' + database + '/series'
     else
       endpoint = 'http://' + host + ':' + port + '/write'
@@ -47,8 +47,8 @@ class Client
       client.send message, 0, message.length, port, host
 
   metricsJson: (metrics) ->
-    legacy = @config.get('influxdb.legacy').get() ? false
-    if legacy
+    version = @config.get('influxdb.version').get() ? '0.9'
+    if version == '0.8'
       data = []
     else
       data =
@@ -59,7 +59,7 @@ class Client
     for key, desc of metrics
       [val, unit, sample] = @parseRow desc
 
-      if legacy
+      if version == '0.8'
         data.push
           name: key,
           columns: ['value'],

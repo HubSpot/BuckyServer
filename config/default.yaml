@@ -18,8 +18,8 @@ influxdb:
   password: 'root'
   use_udp: false
   retentionPolicy: 'default'
-  # Set legacy to true if you're using influxdb 0.8, for 0.9+ set legacy to false
-  legacy: false
+  # Acceptable version are: '0.8' and '0.9'
+  version: '0.9'
 
 
 modules:
