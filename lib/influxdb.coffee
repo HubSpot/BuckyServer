@@ -11,7 +11,7 @@ class Client
     @send = if useUDP then @sendUDP() else @sendHTTP()
 
   write: (metrics) ->
-    @send @metricsJson metrics
+    @send @metricsParse metrics
 
   sendHTTP: ->
     host = @config.get('influxdb.host').get() ? 'localhost'
@@ -22,13 +22,14 @@ class Client
     logger = @logger
     client = request.defaults
       method: 'POST'
-      url: 'http://' + host + ':' + port + '/db/' + database + '/series'
+      url: 'http://' + host + ':' + port + '/write'
       qs:
         u: username
         p: password
+        db: database
 
-    (metricsJson) ->
-      client form: metricsJson, (error, response, body) ->
+    (metricsParse) ->
+      client body: metricsParse.join('\n'), (error, response, body) ->
         logger.log error if error
 
   sendUDP: ->
@@ -52,6 +53,17 @@ class Client
         points: [[parseFloat val]]
 
     JSON.stringify data
+
+  metricsParse: (metrics) ->
+    data = []
+    for key, desc of metrics
+      row = @parseRow desc
+      continue unless row
+      [val, unit, sample] = row
+
+      data.push key + ' ' + 'value=' + [[parseFloat val]]
+
+    return data
 
   parseRow: (row) ->
     re = /([0-9\.]+)\|([a-z]+)(?:@([0-9\.]+))?/
