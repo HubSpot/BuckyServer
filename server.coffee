@@ -7,6 +7,7 @@ express = require 'express'
 # Set cwd for config, and load config file
 process.chdir(__dirname);
 config = require 'config'
+cluster = require 'cluster'
 
 configWrapper = require './lib/configWrapper'
 load = require './lib/load'
@@ -112,6 +113,7 @@ loadApp = (logger, loadedConfig) ->
       res.send('OK\n')
 
     port = process.env.PORT ? loadedConfig.get('server.port').get() ? 5000
+    port = (port + cluster.worker.id - 1) if process.env.CLUSTER && cluster.isWorker
     app.listen(port)
 
     logger.log('Server listening on port %d in %s mode', port, app.settings.env)
