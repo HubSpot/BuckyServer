@@ -3,6 +3,9 @@
 Q = require 'q'
 _ = require 'underscore'
 express = require 'express'
+
+# Set cwd for config, and load config file
+process.chdir(__dirname);
 config = require 'config'
 
 configWrapper = require './lib/configWrapper'
@@ -22,13 +25,13 @@ loadConfig = (logger) ->
     load(MODULES.config, {config, logger})
   else
     configWrapper(config)
-    
+
 setCORSHeaders = (req, res, next) ->
   res.setHeader 'Access-Control-Allow-Origin', '*'
   res.setHeader 'Access-Control-Allow-Methods', 'POST'
   res.setHeader 'Access-Control-Max-Age', '604800'
   res.setHeader 'Access-Control-Allow-Credentials', 'true'
-  
+
   next()
 
 parser = (req, res, next) ->
@@ -53,7 +56,7 @@ parser = (req, res, next) ->
 
 loadApp = (logger, loadedConfig) ->
   app = express()
-     
+
   APP_ROOT = process.env.APP_ROOT ? loadedConfig.get('server.appRoot').get() ? ''
 
   moduleGroups = {}
