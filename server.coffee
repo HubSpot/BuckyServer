@@ -5,7 +5,7 @@ _ = require 'underscore'
 express = require 'express'
 
 # Set cwd for config, and load config file
-process.chdir(__dirname);
+process.chdir __dirname
 config = require 'config'
 
 configWrapper = require './lib/configWrapper'
@@ -14,7 +14,7 @@ load = require './lib/load'
 MODULES = config.modules
 loadLogger = ->
   if MODULES.logger
-    load(MODULES.logger, {config})
+    load MODULES.logger, {config}
   else
     console
 
@@ -22,15 +22,21 @@ loadLogger = ->
 # app can optionally swap it out for something else.
 loadConfig = (logger) ->
   if MODULES.config
-    load(MODULES.config, {config, logger})
+    load MODULES.config, {config, logger}
   else
-    configWrapper(config)
+    configWrapper config
 
 setCORSHeaders = (req, res, next) ->
   res.setHeader 'Access-Control-Allow-Origin', '*'
   res.setHeader 'Access-Control-Allow-Methods', 'POST'
   res.setHeader 'Access-Control-Max-Age', '604800'
   res.setHeader 'Access-Control-Allow-Credentials', 'true'
+  res.setHeader 'Access-Control-Allow-Headers', 'content-type'
+
+  next()
+
+setJSONHeader = (req, res, next) ->
+  req.headers['content-type'] = 'application/json'
 
   next()
 
@@ -103,6 +109,7 @@ loadApp = (logger, loadedConfig) ->
 
     for path, handlers of routes
       # Bind all request modules as middleware and install the collectors
+      app.post "#{ path }/json", setJSONHeader, express.json(), setCORSHeaders, handlers...
       app.post path, parser, setCORSHeaders, handlers...
 
       app.options path, setCORSHeaders, (req, res) ->
@@ -112,14 +119,14 @@ loadApp = (logger, loadedConfig) ->
       res.send('OK\n')
 
     port = process.env.PORT ? loadedConfig.get('server.port').get() ? 5000
-    app.listen(port)
+    app.listen port
 
-    logger.log('Server listening on port %d in %s mode', port, app.settings.env)
+    logger.log 'Server listening on port %d in %s mode', port, app.settings.env
 
 Q.when(loadLogger()).then (logger) ->
 
   logger.log "Loading Config"
-  Q.when(loadConfig(logger)).then (loadedConfig) ->
+  Q.when(loadConfig logger).then (loadedConfig) ->
 
     logger.log "Loading App"
     loadApp(logger, loadedConfig)
