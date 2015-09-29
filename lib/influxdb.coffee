@@ -41,6 +41,7 @@ class Client
     (formatMetrics) ->
       if version == "0.9"
         metrics = formatMetrics.join "\n"
+        # uncomment to see data sent to DB
         # logger.log "db: " + database + "\n" + metrics
         client body: metrics, (error, response, body) ->
           logger.log "Warning:" if body && body.length > 0
@@ -48,6 +49,7 @@ class Client
           logger.log error if error
       else
         metrics = JSON.stringify formatMetrics
+        # logger.log "db: " + database + "\n" + metrics
         client form: metrics, (error, response, body) ->
           logger.log "Warning:" if body && body.length > 0
           logger.log "\tresponse:\n", body if body && body.length > 0
