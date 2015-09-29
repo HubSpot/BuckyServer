@@ -58,7 +58,7 @@ to `/APP_ROOT/v1/send` on whichever port you specify.
 # Install nodejs
 # This assumes you're on a 64 bit machine
 wget http://nodejs.org/dist/v0.10.19/node-v0.10.19-linux-x64.tar.gz
-tar xvf node-v0.10.19-linux-x64.tar.gz 
+tar xvf node-v0.10.19-linux-x64.tar.gz
 sudo ln -s `pwd`/node-v0.10.19-linux-x64/bin/{node,npm} /usr/local/bin/
 
 # Grab a Bucky release
@@ -180,7 +180,7 @@ called with like this:
 You are free to implement the `on` method as a dud if live reloading doesn't
 make sense using your config system.  Take a look at [lib/configWrapper.coffee](lib/configWrapper.coffee)
 for an example of how a basic object can be converted (and feel free to use it).
-  
+
 #### App
 
 App modules get loaded once, and can optionally provide a function to be ran with each request.
@@ -236,7 +236,10 @@ module.exports = ({app, logger, config}, next) ->
 
 ### Format
 
-If you are interested in writing new clients, the format of metric data is the same as is used by statsd:
+If you are interested in writing new clients, there are two endpoints for inbound data.
+The default endpoint uses the same format as statsd:
+
+default endpoint: `{hostname}:{port}/v1/{appRoot}` uses
 
 ```
 <metric name>:<metric value>|<unit>[@<sample rate>]
@@ -249,4 +252,24 @@ my.awesome.metric:35|ms
 some.other.metric:3|c@0.5
 ```
 
-All requests are sent with content-type `text/plain`.
+All post reqeusts sent to the default endpoint must use content-type `text/plain`.
+
+JSON endpoint: `{hostname}:{port}/v1/{appRoot}/json` uses
+
+```javascript
+{
+  "<metric name>": "<metric value>[|<unit>[@<sample rate>]"
+}
+```
+
+This allows for the ':' character to be included in your metrics. This is valid for InfluxDB Line Protocol.
+
+For example:
+```javascript
+{
+  "page,browser=Chrome,browserVersion=44,url=http://localhost:3000/#customHash/%7Bexample%3A%22encoded%20data%22%7D,key=domContentLoadedEventEnd": "500|ms",
+  "ajax,browser=Microsoft\\ Internet\\ Explorer,browserVersion=8,url=http://localhost:3000/#customHash/%7Bexample%3A%22encoded%20data%22%7D,endpoint=your/awesome/template.html,method=GET,status=200": "1|c"
+}
+```
+
+All post request to the json endpoint will be *converted* to content-type 'application/json'. This allows for backwards compatibility with IE8 which can't send XDomainRequest with a content-type other than 'plain/text'.
