@@ -3,6 +3,7 @@
 Q = require 'q'
 _ = require 'underscore'
 express = require 'express'
+http = require 'http'
 
 # Set cwd for config, and load config file
 process.chdir __dirname
@@ -118,17 +119,24 @@ loadApp = (logger, loadedConfig) ->
     app.get "#{ APP_ROOT }/v1/health-check", (req, res) ->
       res.send('OK\n')
 
-    port = process.env.PORT ? loadedConfig.get('server.port').get() ? 5000
     if loadedConfig.get('server.https.options').get() instanceof Object
       https = require 'https'
       fs = require 'fs'
       httpsOptions = _.mapObject loadedConfig.get('server.https.options').get(), (v, k) ->
-        fs.readFileSync(v)
-      https.createServer(httpsOptions, app).listen port
-    else
-      app.listen port
-
-    logger.log 'Server listening on port %d in %s mode', port, app.settings.env
+        if _.isString(v)
+          try
+            fs.readFileSync(v)
+          catch
+            v
+        else
+          v
+      httpsPort = loadedConfig.get('server.https.port').get() ? (port + 1)
+      https.createServer(httpsOptions, app).listen httpsPort
+      logger.log "HTTPS Server listening on port %d in %s mode", httpsPort, app.settings.env
+    if !loadedConfig.get('server.httpsOnly').get()
+      port = process.env.PORT ? loadedConfig.get('server.port').get() ? 5000
+      http.createServer(app).listen port
+      logger.log 'HTTP Server listening on port %d in %s mode', port, app.settings.env
 
 Q.when(loadLogger()).then (logger) ->
 

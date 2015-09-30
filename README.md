@@ -57,9 +57,9 @@ to `/APP_ROOT/v1/send` on whichever port you specify.
 ```bash
 # Install nodejs
 # This assumes you're on a 64 bit machine
-wget http://nodejs.org/dist/v0.10.19/node-v0.10.19-linux-x64.tar.gz
-tar xvf node-v0.10.19-linux-x64.tar.gz
-sudo ln -s `pwd`/node-v0.10.19-linux-x64/bin/{node,npm} /usr/local/bin/
+wget https://nodejs.org/dist/v4.1.1/node-v4.1.1-linux-x64.tar.gz
+tar xvf node-v4.1.1-linux-x64.tar.gz
+sudo ln -s `pwd`/node-v4.1.1-linux-x64/bin/{node,npm} /usr/local/bin/
 
 # Grab a Bucky release
 # You should use the latest release available at https://github.com/HubSpot/BuckyServer/releases
@@ -101,7 +101,14 @@ If you need more customization, you can write a module:
 
 There are a few of types of modules:
 
-
+- Server - Use to set properties of the Bucky Server
+  - port - Use to set the port that Bucky Server will listen to
+  - appRoot - Use to define the root of the endpoint
+  - https - Use to set options for running Bucky Server in https mode
+    - port - Use to specify the port for https, if not populated the http server port + 1
+    - options - Use to define the certificates for https. [List of all possible options](https://nodejs.org/api/tls.html#tls_tls_createserver_options_secureconnectionlistener)
+      - For all options that accept a buffer you can use the path to the file and they'll be read in
+  - httpsOnly - If this flag is set to true then Bucky Server will not run in http mode
 - Logger - Use to have Bucky log to something other than the console
 - Config - Use to have Bucky pull config from somewhere other than the default file
 - App - Use to do things when Bucky loads and/or on requests.  Auth, monitoring initialization, etc.

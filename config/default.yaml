@@ -1,14 +1,15 @@
 server:
   port: 5999
   appRoot: "/bucky"
-
-  # If the following values are set, bucky will run as https and parse the key and cert files
-  # Place the key and cert files in the BuckyServer directory with server.coffee
-
+  # If https options are set then bucky will also listen on https
   # https:
-  #   options:
-  #     key: "key.pem"
-  #     cert: "cert.pem"
+    # port: 5599
+    # See full list of options at: https://nodejs.org/api/tls.html#tls_tls_createserver_options_secureconnectionlistener
+    # options:
+      # key: "ssl/key.pem"
+      # cert: "ssl/cert.pem"
+  # If the following is set to true then bucky server will not run in http mode
+  # httpsOnly: true
 
 statsd:
   host: 'localhost'
