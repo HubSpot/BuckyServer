@@ -119,7 +119,14 @@ loadApp = (logger, loadedConfig) ->
       res.send('OK\n')
 
     port = process.env.PORT ? loadedConfig.get('server.port').get() ? 5000
-    app.listen port
+    if loadedConfig.get('server.https.options').get() instanceof Object
+      https = require 'https'
+      fs = require 'fs'
+      httpsOptions = _.mapObject loadedConfig.get('server.https.options').get(), (v, k) ->
+        fs.readFileSync(v)
+      https.createServer(httpsOptions, app).listen port
+    else
+      app.listen port
 
     logger.log 'Server listening on port %d in %s mode', port, app.settings.env
 

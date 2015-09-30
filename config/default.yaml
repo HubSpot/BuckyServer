@@ -2,6 +2,14 @@ server:
   port: 5999
   appRoot: "/bucky"
 
+  # If the following values are set, bucky will run as https and parse the key and cert files
+  # Place the key and cert files in the BuckyServer directory with server.coffee
+
+  # https:
+  #   options:
+  #     key: "key.pem"
+  #     cert: "cert.pem"
+
 statsd:
   host: 'localhost'
   port: 8125
@@ -18,7 +26,7 @@ influxdb:
   password: 'root'
   use_udp: false
   retentionPolicy: 'default'
-  # Acceptable version are: '0.8' and '0.9'
+  # All version other than '0.9' will default to '0.8'
   version: '0.9'
 
 
@@ -32,7 +40,7 @@ modules:
 
   collectors:
   # Uncomment the modules that you'd like to use
-    # - ./modules/collectionLogger
+    - ./modules/collectionLogger
     # - ./modules/statsd
     # - ./modules/openTSDB
     # - ./modules/influxdb

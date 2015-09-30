@@ -23,7 +23,7 @@
     "express": "~3.2.5",
     "coffee-script": "~1.6.2",
     "lynx": "~0.0.11",
-    "underscore": "~1.4.4",
+    "underscore": "~1.8.3",
     "nopents": "~0.1.0",
     "config": "~0.4.27",
     "q": "~0.9.6",
