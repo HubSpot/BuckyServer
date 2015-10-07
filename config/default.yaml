@@ -1,6 +1,17 @@
 server:
   port: 5999
   appRoot: "/bucky"
+  # If https options are set then bucky will also listen on https
+  # https:
+    # port: 5599
+    # See full list of options at: https://nodejs.org/api/tls.html#tls_tls_createserver_options_secureconnectionlistener
+    # options:
+      # key:
+        # filePath: "ssl/key.pem"
+      # cert:
+        # filePath: "ssl/cert.pem"
+  # If the following is set to true then bucky server will not run in http mode
+  # httpsOnly: true
 
 statsd:
   host: 'localhost'
@@ -18,7 +29,7 @@ influxdb:
   password: 'root'
   use_udp: false
   retentionPolicy: 'default'
-  # Acceptable version are: '0.8' and '0.9'
+  # All version other than '0.9' will default to '0.8'
   version: '0.9'
 
 
@@ -32,7 +43,7 @@ modules:
 
   collectors:
   # Uncomment the modules that you'd like to use
-    # - ./modules/collectionLogger
+    - ./modules/collectionLogger
     # - ./modules/statsd
     # - ./modules/openTSDB
     # - ./modules/influxdb

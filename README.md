@@ -57,13 +57,13 @@ to `/APP_ROOT/v1/send` on whichever port you specify.
 ```bash
 # Install nodejs
 # This assumes you're on a 64 bit machine
-wget http://nodejs.org/dist/v0.10.19/node-v0.10.19-linux-x64.tar.gz
-tar xvf node-v0.10.19-linux-x64.tar.gz 
-sudo ln -s `pwd`/node-v0.10.19-linux-x64/bin/{node,npm} /usr/local/bin/
+wget https://nodejs.org/dist/v4.1.1/node-v4.1.1-linux-x64.tar.gz
+tar xvf node-v4.1.1-linux-x64.tar.gz
+sudo ln -s `pwd`/node-v4.1.1-linux-x64/bin/{node,npm} /usr/local/bin/
 
 # Grab a Bucky release
 # You should use the latest release available at https://github.com/HubSpot/BuckyServer/releases
-wget https://github.com/HubSpot/BuckyServer/archive/v0.3.0.tar.gz -O BuckyServer.tar.gz
+wget https://github.com/HubSpot/BuckyServer/archive/v0.6.2.tar.gz -O BuckyServer.tar.gz
 tar xvf BuckyServer.tar.gz
 cd BuckyServer
 
@@ -95,20 +95,82 @@ If you're not already running a stats collection service, you should take a look
 Most people will only need to specify [the config](config/default.yaml) they're interested in
 and start up the server.
 
-If you need more customization, you can write a module:
+Configuration Options:
+
+- `server:` {Object}  
+Use to set properties of the Bucky Server.
+  - `port:` {Number}  
+  Use to set the port that Bucky Server will listen to.
+  - `appRoot:` {String}  
+  Use to define the root of the endpoint.
+  - `https:` {Object}  
+  Defines a set of options for running Bucky in https mode.
+    - `port:` {Number}  
+    Use to specify the port for https, if not populated the default is the http server port + 1.
+    - `options:` {Object}  
+    Use to define the options for https.
+    key and cert are mandatory options, here is a full [list of all available options](https://nodejs.org/api/tls.html#tls_tls_createserver_options_secureconnectionlistener).
+    For all options that accept a buffer you can use the path to the file containing the option's data.
+     - `key:` {Object|String|Buffer}  
+     `key` can be an Object that contains a filePath to the key file, or `key` can contain the entire String/Buffer for the key.
+       - `filePath:` {String}  
+       Path to key file. The filePath is only required for loading the key from a file.
+     - `cert:` {Object|String|Buffer}  
+     `cert` can be an Object that contains a filePath to the key file, or `cert` can contain the entire String/Buffer for the certificate.
+       - `filePath:` {String}  
+       Path to certificate file. The filePath is only required for loading the certificate from a file.
+  - `httpsOnly:` {Boolean}  
+  If this flag is set to `true` then Bucky Server will not run in http mode.
+
+- `statsd:`  
+Configuration for connecting to statsd. Only required when using statsd module.
+  - `host:` {String}  
+  The hostname for your statsd server.
+  - `port:` {Number}  
+  The port for your statsd server.
+
+- `opentsdb:`  
+Configuration for connecting to openTSDB. Only required when using openTSDB module.
+  - `host:` {String}  
+  The hostname for your openTSDB server.
+  - `port:` {Number}  
+  The port for your openTSDB server.
+
+- `influxdb:`  
+Configuration for connecting to InfluxDB. Only required when using InfluxDB module.
+  - `host:` {String}  
+  The hostname for your InfluxDB server.
+  - `port:` {Number}  
+  The port for your InfluxDB server.
+  - `database:` {String}  
+  The database to write data to inside InfluxDB.
+  - `username:` {String}  
+  A user in InfluxDB that has write permissions to the specified database.
+  - `password:` {String}  
+  The password for the specified user.
+  - `use_udp:` {Boolean} (optional)  
+  When this option is set to `true` Bucky Server will communicate with InfluxDB using UDP instead of TCP.
+  - `retentionPolicy:` {String} (optional)  
+  The name of a retention policy that's been created in InfluxDB.
+  - `version:` {String} (optional)  
+  The major version of InfluxDB that you're using (either '0.8' or '0.9').
+  This defaults to '0.8' if it's omitted.
+
+- `modules:`  
+Defines which modules will load when BuckyServer starts.
+  - `app:`  
+  List of core modules to be required by BuckyServer.
+  - `collectors:`  
+  List of modules that will be used by the collectors module for consuming, formatting, and handling the data that's sent to BuckyServer.
 
 ### Modules
 
 There are a few of types of modules:
-
-
-- Logger - Use to have Bucky log to something other than the console
-- Config - Use to have Bucky pull config from somewhere other than the default file
+- Logger - Use to have Bucky log to something other than the console.
+- Config - Use to have Bucky pull config from somewhere other than the default file.
 - App - Use to do things when Bucky loads and/or on requests.  Auth, monitoring initialization, etc.
 - Collectors - Use to send Bucky data to new and exciting places.
-
-We can only have one logger and one config, but you can specify as many app and collector modules
-as you like.
+We can only have one logger and one config, but you can specify as many app and collector modules as you like.
 
 All modules follow the same basic sketch.  You export a method which is called when Bucky
 starts up.  That method is provided with as much of `{app, config, logger}` as we have
@@ -180,7 +242,7 @@ called with like this:
 You are free to implement the `on` method as a dud if live reloading doesn't
 make sense using your config system.  Take a look at [lib/configWrapper.coffee](lib/configWrapper.coffee)
 for an example of how a basic object can be converted (and feel free to use it).
-  
+
 #### App
 
 App modules get loaded once, and can optionally provide a function to be ran with each request.
@@ -236,7 +298,10 @@ module.exports = ({app, logger, config}, next) ->
 
 ### Format
 
-If you are interested in writing new clients, the format of metric data is the same as is used by statsd:
+If you are interested in writing new clients, there are two endpoints for inbound data.
+The default endpoint uses the same format as statsd:
+
+default endpoint: `{hostname}:{port}/v1/{appRoot}` uses
 
 ```
 <metric name>:<metric value>|<unit>[@<sample rate>]
@@ -249,4 +314,24 @@ my.awesome.metric:35|ms
 some.other.metric:3|c@0.5
 ```
 
-All requests are sent with content-type `text/plain`.
+All post reqeusts sent to the default endpoint must use content-type `text/plain`.
+
+JSON endpoint: `{hostname}:{port}/v1/{appRoot}/json` uses
+
+```javascript
+{
+  "<metric name>": "<metric value>[|<unit>[@<sample rate>]"
+}
+```
+
+This allows for the ':' character to be included in your metrics. This is valid for InfluxDB Line Protocol.
+
+For example:
+```javascript
+{
+  "page,browser=Chrome,browserVersion=44,url=http://localhost:3000/#customHash/%7Bexample%3A%22encoded%20data%22%7D,key=domContentLoadedEventEnd": "500|ms",
+  "ajax,browser=Microsoft\\ Internet\\ Explorer,browserVersion=8,url=http://localhost:3000/#customHash/%7Bexample%3A%22encoded%20data%22%7D,endpoint=your/awesome/template.html,method=GET,status=200": "1|c"
+}
+```
+
+All post request to the json endpoint will be *converted* to content-type 'application/json'. This allows for backwards compatibility with IE8 which can't send XDomainRequest with a content-type other than 'plain/text'.
