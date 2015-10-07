@@ -6,8 +6,10 @@ server:
     # port: 5599
     # See full list of options at: https://nodejs.org/api/tls.html#tls_tls_createserver_options_secureconnectionlistener
     # options:
-      # key: "ssl/key.pem"
-      # cert: "ssl/cert.pem"
+      # key:
+        # filePath: "ssl/key.pem"
+      # cert:
+        # filePath: "ssl/cert.pem"
   # If the following is set to true then bucky server will not run in http mode
   # httpsOnly: true
 

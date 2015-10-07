@@ -123,11 +123,11 @@ loadApp = (logger, loadedConfig) ->
       https = require 'https'
       fs = require 'fs'
       httpsOptions = _.mapObject loadedConfig.get('server.https.options').get(), (v, k) ->
-        if _.isString(v)
+        if _.isObject v and _.has v, 'filePath'
           try
-            fs.readFileSync(v)
-          catch
-            v
+            fs.readFileSync v.filePath
+          catch e
+            logger.error "Unable to load file: " + v.filePath, e
         else
           v
       httpsPort = loadedConfig.get('server.https.port').get() ? (port + 1)

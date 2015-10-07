@@ -95,27 +95,82 @@ If you're not already running a stats collection service, you should take a look
 Most people will only need to specify [the config](config/default.yaml) they're interested in
 and start up the server.
 
-If you need more customization, you can write a module:
+Configuration Options:
+
+- `server:` {Object}  
+Use to set properties of the Bucky Server.
+  - `port:` {Number}  
+  Use to set the port that Bucky Server will listen to.
+  - `appRoot:` {String}  
+  Use to define the root of the endpoint.
+  - `https:` {Object}  
+  Defines a set of options for running Bucky in https mode.
+    - `port:` {Number}  
+    Use to specify the port for https, if not populated the default is the http server port + 1.
+    - `options:` {Object}  
+    Use to define the options for https.
+    key and cert are mandatory options, here is a full [list of all available options](https://nodejs.org/api/tls.html#tls_tls_createserver_options_secureconnectionlistener).
+    For all options that accept a buffer you can use the path to the file containing the option's data.
+     - `key:` {Object|String|Buffer}  
+     `key` can be an Object that contains a filePath to the key file, or `key` can contain the entire String/Buffer for the key.
+       - `filePath:` {String}  
+       Path to key file. The filePath is only required for loading the key from a file.
+     - `cert:` {Object|String|Buffer}  
+     `cert` can be an Object that contains a filePath to the key file, or `cert` can contain the entire String/Buffer for the certificate.
+       - `filePath:` {String}  
+       Path to certificate file. The filePath is only required for loading the certificate from a file.
+  - `httpsOnly:` {Boolean}  
+  If this flag is set to `true` then Bucky Server will not run in http mode.
+
+- `statsd:`  
+Configuration for connecting to statsd. Only required when using statsd module.
+  - `host:` {String}  
+  The hostname for your statsd server.
+  - `port:` {Number}  
+  The port for your statsd server.
+
+- `opentsdb:`  
+Configuration for connecting to openTSDB. Only required when using openTSDB module.
+  - `host:` {String}  
+  The hostname for your openTSDB server.
+  - `port:` {Number}  
+  The port for your openTSDB server.
+
+- `influxdb:`  
+Configuration for connecting to InfluxDB. Only required when using InfluxDB module.
+  - `host:` {String}  
+  The hostname for your InfluxDB server.
+  - `port:` {Number}  
+  The port for your InfluxDB server.
+  - `database:` {String}  
+  The database to write data to inside InfluxDB.
+  - `username:` {String}  
+  A user in InfluxDB that has write permissions to the specified database.
+  - `password:` {String}  
+  The password for the specified user.
+  - `use_udp:` {Boolean} (optional)  
+  When this option is set to `true` Bucky Server will communicate with InfluxDB using UDP instead of TCP.
+  - `retentionPolicy:` {String} (optional)  
+  The name of a retention policy that's been created in InfluxDB.
+  - `version:` {String} (optional)  
+  The major version of InfluxDB that you're using (either '0.8' or '0.9').
+  This defaults to '0.8' if it's omitted.
+
+- `modules:`  
+Defines which modules will load when BuckyServer starts.
+  - `app:`  
+  List of core modules to be required by BuckyServer.
+  - `collectors:`  
+  List of modules that will be used by the collectors module for consuming, formatting, and handling the data that's sent to BuckyServer.
 
 ### Modules
 
 There are a few of types of modules:
-
-- Server - Use to set properties of the Bucky Server
-  - port - Use to set the port that Bucky Server will listen to
-  - appRoot - Use to define the root of the endpoint
-  - https - Use to set options for running Bucky Server in https mode
-    - port - Use to specify the port for https, if not populated the http server port + 1
-    - options - Use to define the certificates for https. [List of all possible options](https://nodejs.org/api/tls.html#tls_tls_createserver_options_secureconnectionlistener)
-      - For all options that accept a buffer you can use the path to the file and they'll be read in
-  - httpsOnly - If this flag is set to true then Bucky Server will not run in http mode
-- Logger - Use to have Bucky log to something other than the console
-- Config - Use to have Bucky pull config from somewhere other than the default file
+- Logger - Use to have Bucky log to something other than the console.
+- Config - Use to have Bucky pull config from somewhere other than the default file.
 - App - Use to do things when Bucky loads and/or on requests.  Auth, monitoring initialization, etc.
 - Collectors - Use to send Bucky data to new and exciting places.
-
-We can only have one logger and one config, but you can specify as many app and collector modules
-as you like.
+We can only have one logger and one config, but you can specify as many app and collector modules as you like.
 
 All modules follow the same basic sketch.  You export a method which is called when Bucky
 starts up.  That method is provided with as much of `{app, config, logger}` as we have
