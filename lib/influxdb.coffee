@@ -7,7 +7,9 @@ class Client
 
   init: ->
     useUDP = @config.get('influxdb.use_udp').get() ? false
-
+    version = @config.get('influxdb.version').get() ? '0.9'
+    throw new Error "Invalid InfluxDB Version" if version not in ['0.8', '0.9']
+    
     @send = if useUDP then @sendUDP() else @sendHTTP()
 
   write: (metrics) ->
