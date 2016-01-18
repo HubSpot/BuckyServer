@@ -2,6 +2,11 @@ server:
   port: 5999
   appRoot: "/bucky"
 
+handlers:
+  http_headers:
+    Access-Control-Allow-Origin: *
+
+
 statsd:
   host: 'localhost'
   port: 8125
