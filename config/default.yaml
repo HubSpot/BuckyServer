@@ -21,6 +21,7 @@ influxdb:
   # Acceptable version are: '0.8' and '0.9'
   version: '0.9'
 
+useWhitelistedKeys: false
 
 modules:
   # The modules just get require'd in, so they don't have to be in the Bucky project.
@@ -33,25 +34,24 @@ modules:
   collectors:
   # Uncomment the modules that you'd like to use
     # - ./modules/collectionLogger
-    - ./modules/statsd
+    # - ./modules/statsd
     # - ./modules/openTSDB
     # - ./modules/influxdb
 
-  whitelistedkeys:
-    - file.page.navigationStart
-    - file.page.unloadEventStart
-    - file.page.unloadEventEnd
-    - file.page.fetchStart
-    - file.page.domainLookupStart
-    - file.page.domainLookupEnd
-    - file.page.connectStart
-    - file.page.connectEnd
-    - file.page.requestStart
-    - file.page.responseStart
-    - file.page.responseEnd
-    - file.page.domLoading
-    - file.page.domInteractive
-    - file.page.domContentLoadedEventStart
-    - file.page.toJSON
-    - time.to.click.dont.click.button
-    - dont.click.button.clicks
+  whitelistedKeys:
+  # Uncomment the keys that you'd like to whitelist
+    # - file.page.navigationStart
+    # - file.page.unloadEventStart
+    # - file.page.unloadEventEnd
+    # - file.page.fetchStart
+    # - file.page.domainLookupStart
+    # - file.page.domainLookupEnd
+    # - file.page.connectStart
+    # - file.page.connectEnd
+    # - file.page.requestStart
+    # - file.page.responseStart
+    # - file.page.responseEnd
+    # - file.page.domLoading
+    # - file.page.domInteractive
+    # - file.page.domContentLoadedEventStart
+    # - file.page.toJSON

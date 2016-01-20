@@ -3,24 +3,29 @@ _ = require 'underscore'
 
 load = require "../lib/load"
 modules = require("config").modules
+useWhitelistedKeys = require("config").useWhitelistedKeys
 whitelistedkeys = ''
 
 module.exports = ({app, logger, config}, next) ->
   collectorHandler = (collectors) ->
     arrOfVals = []
     return (req, res) ->
-      for fields of req.body
-        arrOfVals.push( fields )
-      if arrayEqual(arrOfVals, whitelistedkeys)
-        res.send(204, '')
+      if useWhitelistedKeys
+        for fields of req.body
+          if (arrOfVals.indexOf( fields ) == -1)
+            arrOfVals.push( fields )
+        if arrayEqual(arrOfVals, whitelistedkeys)
+          res.send(204, '')
+        else
+          res.send(406, '')
       else
-       res.send(406, '')
+        res.send(204, '')
 
       for coll in collectors
         coll(req.body, {req, res})
 
   logger.log "Loading collectors: #{ modules.collectors.join(', ') }"
-  whitelistedkeys = "#{modules.whitelistedkeys}".split(',')
+  whitelistedkeys = "#{modules.whitelistedKeys}".split(',')
 
   collectors = {}
   collPromises = []
