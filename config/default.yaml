@@ -4,7 +4,7 @@ server:
 
 handlers:
   http_headers:
-    Access-Control-Allow-Origin: *
+    Access-Control-Allow-Origin: www.app.dev.pardot.com
 
 
 statsd:
@@ -38,6 +38,11 @@ modules:
   collectors:
   # Uncomment the modules that you'd like to use
     # - ./modules/collectionLogger
-    # - ./modules/statsd
+    - ./modules/statsd
     # - ./modules/openTSDB
     # - ./modules/influxdb
+
+  whitelistedkeys:
+    - abc
+    - def
+    - ghi
