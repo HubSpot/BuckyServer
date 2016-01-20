@@ -2,6 +2,10 @@ server:
   port: 5999
   appRoot: "/bucky"
 
+handlers:
+  http_headers:
+    Access-Control-Allow-Origin: www.app.dev.pardot.com
+
 statsd:
   host: 'localhost'
   port: 8125
