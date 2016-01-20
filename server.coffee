@@ -12,7 +12,6 @@ configWrapper = require './lib/configWrapper'
 load = require './lib/load'
 
 MODULES = config.modules
-ALLOW_ORIGIN_HEADERS = config.http_headers
 
 loadLogger = ->
   if MODULES.logger
@@ -29,7 +28,7 @@ loadConfig = (logger) ->
     configWrapper(config)
 
 setCORSHeaders = (req, res, next) ->
-  res.setHeader 'Access-Control-Allow-Origin', ALLOW_ORIGIN_HEADERS
+  res.setHeader 'Access-Control-Allow-Origin', '*'
   res.setHeader 'Access-Control-Allow-Methods', 'POST'
   res.setHeader 'Access-Control-Max-Age', '604800'
   res.setHeader 'Access-Control-Allow-Credentials', 'true'
@@ -60,7 +59,6 @@ loadApp = (logger, loadedConfig) ->
   app = express()
 
   APP_ROOT = process.env.APP_ROOT ? loadedConfig.get('server.appRoot').get() ? ''
-  ALLOW_ORIGIN_HEADERS = loadedConfig.get('handlers.http_headers.Access-Control-Allow-Origin').get() ? '*'
 
   moduleGroups = {}
   loadKeys = (group) ->
