@@ -12,7 +12,7 @@ configWrapper = require './lib/configWrapper'
 load = require './lib/load'
 
 MODULES = config.modules
-ALLOW_ORIGIN_HEADERS = config.http_headers
+ALLOW_ORIGIN_HEADERS = config.httpHeaders
 loadLogger = ->
   if MODULES.logger
     load(MODULES.logger, {config})
@@ -59,7 +59,7 @@ loadApp = (logger, loadedConfig) ->
   app = express()
 
   APP_ROOT = process.env.APP_ROOT ? loadedConfig.get('server.appRoot').get() ? ''
-  ALLOW_ORIGIN_HEADERS = loadedConfig.get('handlers.http_headers.Access-Control-Allow-Origin').get() ? '*'
+  ALLOW_ORIGIN_HEADERS = loadedConfig.get('httpHeaders.allowOrigin').get() ? '*'
 
   moduleGroups = {}
   loadModuleGroup = (group) ->

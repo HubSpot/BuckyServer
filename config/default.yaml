@@ -2,9 +2,8 @@ server:
   port: 5999
   appRoot: "/bucky"
 
-handlers:
-  http_headers:
-    Access-Control-Allow-Origin: '*'
+httpHeaders:
+  allowOrigin: '*'
 
 statsd:
   host: 'localhost'
