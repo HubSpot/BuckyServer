@@ -39,7 +39,7 @@ modules:
     # - ./modules/influxdb
 
   whitelistedKeys:
-  # Uncomment the keys that you'd like to whitelist
+  # The example below are timing metrics that Bucky includes by default. You will need to whitelist these if you use the default configuration of Bucky and enable whitelisting by setting useWhitelistedKeys to true
     # - file.page.navigationStart
     # - file.page.unloadEventStart
     # - file.page.unloadEventEnd
