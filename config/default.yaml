@@ -38,6 +38,20 @@ modules:
     # - ./modules/influxdb
 
   whitelistedkeys:
-    - key1
-    - key2
-    - key3
+    - file.page.navigationStart
+    - file.page.unloadEventStart
+    - file.page.unloadEventEnd
+    - file.page.fetchStart
+    - file.page.domainLookupStart
+    - file.page.domainLookupEnd
+    - file.page.connectStart
+    - file.page.connectEnd
+    - file.page.requestStart
+    - file.page.responseStart
+    - file.page.responseEnd
+    - file.page.domLoading
+    - file.page.domInteractive
+    - file.page.domContentLoadedEventStart
+    - file.page.toJSON
+    - time.to.click.dont.click.button
+    - dont.click.button.clicks

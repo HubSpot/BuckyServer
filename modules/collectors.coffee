@@ -7,9 +7,14 @@ whitelistedkeys = ''
 
 module.exports = ({app, logger, config}, next) ->
   collectorHandler = (collectors) ->
+    arrOfVals = []
     return (req, res) ->
-      #logger.log req.body
-      res.send(204, '')
+      for fields of req.body
+        arrOfVals.push( fields )
+      if arrayEqual(arrOfVals, whitelistedkeys)
+        res.send(204, '')
+      else
+       res.send(406, '')
 
       for coll in collectors
         coll(req.body, {req, res})
@@ -41,3 +46,6 @@ module.exports = ({app, logger, config}, next) ->
       collector[path] = collectorHandler(hls)
 
     next collector
+
+  arrayEqual = (a, b) ->
+    a.length is b.length and a.every (elem, i) -> elem is b[i]
