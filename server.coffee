@@ -61,18 +61,6 @@ loadApp = (logger, loadedConfig) ->
   APP_ROOT = process.env.APP_ROOT ? loadedConfig.get('server.appRoot').get() ? ''
 
   moduleGroups = {}
-  loadKeys = (group) ->
-    moduleGroups[group] = {}
-    if MODULES[group]
-      _.map MODULES[group], (name) ->
-        logger.log "Key found", name
-
-    else
-      []
-
-  appPromises = loadKeys 'whitelistedkeys'
-
-  moduleGroups = {}
   loadModuleGroup = (group) ->
     moduleGroups[group] = {}
     if MODULES[group]

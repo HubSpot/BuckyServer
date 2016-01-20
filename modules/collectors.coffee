@@ -3,16 +3,19 @@ _ = require 'underscore'
 
 load = require "../lib/load"
 modules = require("config").modules
+whitelistedkeys = ''
 
 module.exports = ({app, logger, config}, next) ->
   collectorHandler = (collectors) ->
     return (req, res) ->
+      #logger.log req.body
       res.send(204, '')
 
       for coll in collectors
         coll(req.body, {req, res})
 
   logger.log "Loading collectors: #{ modules.collectors.join(', ') }"
+  whitelistedkeys = "#{modules.whitelistedkeys}".split(',')
 
   collectors = {}
   collPromises = []
