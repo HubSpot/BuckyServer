@@ -55,3 +55,5 @@ modules:
     # - file.page.domInteractive
     # - file.page.domContentLoadedEventStart
     # - file.page.toJSON
+    # - time.to.click.dont.click.button
+    # - dont.click.button.clicks
