@@ -12,16 +12,10 @@ module.exports = ({app, logger, config}, next) ->
     return (req, res) ->
       arrOfVals = []
       if useWhitelistedKeys
-        for fields of req.body
-          if (arrOfVals.indexOf( fields ) == -1)
-            arrOfVals.push( fields )
-        if _.isEqual(arrOfVals, whitelistedkeys)
-          res.send(204, '')
-        else
+        if not _.every(_.keys(req.body), (v) -> _.contains(whitelistedkeys, v))
           res.send(406, '')
           return
-      else
-        res.send(204, '')
+      res.send(204, '')
 
       for coll in collectors
         coll(req.body, {req, res})
