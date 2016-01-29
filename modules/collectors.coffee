@@ -4,13 +4,12 @@ _ = require 'underscore'
 load = require "../lib/load"
 modules = require("config").modules
 onlyAcceptWhitelistedKeys = require("config").onlyAcceptWhitelistedKeys
-whitelistedkeys = ''
 
 module.exports = ({app, logger, config}, next) ->
   collectorHandler = (collectors) ->
     return (req, res) ->
       if onlyAcceptWhitelistedKeys
-        if not _.every(_.keys(req.body), (v) -> _.contains(whitelistedkeys, v))
+        if not _.every(_.keys(req.body), (v) -> _.contains(modules.whitelistedKeys, v))
           console.log ("The key set you are trying to send is not whitelisted")
           res.send(406, '')
           return
@@ -20,7 +19,6 @@ module.exports = ({app, logger, config}, next) ->
         coll(req.body, {req, res})
 
   logger.log "Loading collectors: #{ modules.collectors.join(', ') }"
-  whitelistedkeys = "#{modules.whitelistedKeys}".split(',')
 
   collectors = {}
   collPromises = []
