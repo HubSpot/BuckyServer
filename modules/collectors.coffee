@@ -8,9 +8,7 @@ whitelistedkeys = ''
 
 module.exports = ({app, logger, config}, next) ->
   collectorHandler = (collectors) ->
-    arrOfVals = []
     return (req, res) ->
-      arrOfVals = []
       if useWhitelistedKeys
         if not _.every(_.keys(req.body), (v) -> _.contains(whitelistedkeys, v))
           res.send(406, '')
