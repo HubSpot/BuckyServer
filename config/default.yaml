@@ -1,8 +1,6 @@
 server:
   port: 5999
   appRoot: "/bucky"
-
-httpHeaders:
   allowOrigin: '*'
 
 statsd:
