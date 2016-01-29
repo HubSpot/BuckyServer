@@ -3,14 +3,15 @@ _ = require 'underscore'
 
 load = require "../lib/load"
 modules = require("config").modules
-useWhitelistedKeys = require("config").useWhitelistedKeys
+onlyAcceptWhitelistedKeys = require("config").onlyAcceptWhitelistedKeys
 whitelistedkeys = ''
 
 module.exports = ({app, logger, config}, next) ->
   collectorHandler = (collectors) ->
     return (req, res) ->
-      if useWhitelistedKeys
+      if onlyAcceptWhitelistedKeys
         if not _.every(_.keys(req.body), (v) -> _.contains(whitelistedkeys, v))
+          console.log ("The key set you are trying to send is not whitelisted")
           res.send(406, '')
           return
       res.send(204, '')
