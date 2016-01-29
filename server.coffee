@@ -12,7 +12,6 @@ configWrapper = require './lib/configWrapper'
 load = require './lib/load'
 
 MODULES = config.modules
-
 loadLogger = ->
   if MODULES.logger
     load(MODULES.logger, {config})
@@ -63,6 +62,7 @@ loadApp = (logger, loadedConfig) ->
   moduleGroups = {}
   loadModuleGroup = (group) ->
     moduleGroups[group] = {}
+    
     if MODULES[group]
       _.map MODULES[group], (name) ->
         logger.log "Loading #{ group } Module", name
