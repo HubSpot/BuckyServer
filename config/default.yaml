@@ -1,6 +1,7 @@
 server:
   port: 5999
   appRoot: "/bucky"
+  ignoreIpFragment: '192.168.' # skip requests from this ip (or ip fragment). Used to e.g. filter internal traffic
 
 statsd:
   host: 'localhost'
