@@ -9,6 +9,13 @@ module.exports = ({app, logger, config}, next) ->
     return (req, res) ->
       res.send(204, '')
 
+      # filter internal requests
+      isInternalRequest = true if req.ip.indexOf config.get('server.internalIpFragment').get() > -1
+
+      if isInternalRequest
+        logger.log "#! > Skipping collectors for ip:", req.ip
+        return true
+
       for coll in collectors
         coll(req.body, {req, res})
 
