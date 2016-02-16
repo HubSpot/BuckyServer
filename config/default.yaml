@@ -17,6 +17,7 @@ influxdb:
   username: 'root'
   password: 'root'
   use_udp: false
+  use_json: true
   retentionPolicy: 'default'
   # Acceptable version are: '0.8' and '0.9'
   version: '0.9'
