@@ -26,8 +26,8 @@ loadConfig = (logger) ->
   else
     configWrapper(config)
 
-setCORSHeaders = (req, res, next) ->
-  res.setHeader 'Access-Control-Allow-Origin', '*'
+setCORSHeaders = (allowOrigin='*') -> (req, res, next) ->
+  res.setHeader 'Access-Control-Allow-Origin', allowOrigin
   res.setHeader 'Access-Control-Allow-Methods', 'POST'
   res.setHeader 'Access-Control-Max-Age', '604800'
   res.setHeader 'Access-Control-Allow-Credentials', 'true'
@@ -58,6 +58,7 @@ loadApp = (logger, loadedConfig) ->
   app = express()
 
   APP_ROOT = process.env.APP_ROOT ? loadedConfig.get('server.appRoot').get() ? ''
+  allowOrigin = loadedConfig.get('server.allowOrigin').get() ? '*'
 
   moduleGroups = {}
   loadModuleGroup = (group) ->
@@ -103,9 +104,9 @@ loadApp = (logger, loadedConfig) ->
 
     for path, handlers of routes
       # Bind all request modules as middleware and install the collectors
-      app.post path, parser, setCORSHeaders, handlers...
+      app.post path, parser, setCORSHeaders(allowOrigin), handlers...
 
-      app.options path, setCORSHeaders, (req, res) ->
+      app.options path, setCORSHeaders(allowOrigin), (req, res) ->
         res.send 200, ''
 
     app.get "#{ APP_ROOT }/v1/health-check", (req, res) ->
