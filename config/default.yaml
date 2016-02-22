@@ -40,20 +40,20 @@ modules:
 
   whitelistedKeys:
   # The example below are timing metrics that Bucky includes by default. You will need to whitelist these if you use the default configuration of Bucky and enable whitelisting by setting useWhitelistedKeys to true
-    # - file.page.navigationStart
-    # - file.page.unloadEventStart
-    # - file.page.unloadEventEnd
-    # - file.page.fetchStart
-    # - file.page.domainLookupStart
-    # - file.page.domainLookupEnd
-    # - file.page.connectStart
-    # - file.page.connectEnd
-    # - file.page.requestStart
-    # - file.page.responseStart
-    # - file.page.responseEnd
-    # - file.page.domLoading
-    # - file.page.domInteractive
-    # - file.page.domContentLoadedEventStart
-    # - file.page.toJSON
+    - file.page.navigationStart
+    - file.page.unloadEventStart
+    - file.page.unloadEventEnd
+    - file.page.fetchStart
+    - file.page.domainLookupStart
+    - file.page.domainLookupEnd
+    - file.page.connectStart
+    - file.page.connectEnd
+    - file.page.requestStart
+    - file.page.responseStart
+    - file.page.responseEnd
+    - file.page.domLoading
+    - file.page.domInteractive
+    - file.page.domContentLoadedEventStart
+    - file.page.toJSON
     # - time.to.click.dont.click.button
     # - dont.click.button.clicks
