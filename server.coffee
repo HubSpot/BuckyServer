@@ -63,7 +63,7 @@ loadApp = (logger, loadedConfig) ->
   moduleGroups = {}
   loadModuleGroup = (group) ->
     moduleGroups[group] = {}
-
+    
     if MODULES[group]
       _.map MODULES[group], (name) ->
         logger.log "Loading #{ group } Module", name
