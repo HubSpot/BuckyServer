@@ -47,10 +47,11 @@ parser = (req, res, next) ->
     metrics = buf.split('\n')
 
     for metric in metrics
-      [name, value] = metric.split(':')
+      name = metric.substr(0, metric.indexOf(':'));
+      value = metric.substr(metric.indexOf(':') + 1)
 
       if name and value
-        req.body[name] = value
+        req.body[value] = name
 
     next()
 
