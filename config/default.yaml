@@ -21,6 +21,8 @@ influxdb:
   retentionPolicy: 'default'
   # Acceptable version are: '0.8' and '0.9'
   version: '0.9'
+  # Only applies with version '0.9'
+  use_json: true
 
 
 modules:

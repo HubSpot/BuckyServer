@@ -7,14 +7,22 @@ class Client
 
   init: ->
     useUDP = @config.get('influxdb.use_udp').get() ? false
+    version = @config.get('influxdb.version').get() ? '0.9'
+    use_json = @config.get('influxdb.use_json').get() ? false
 
-    @send = if useUDP then @sendUDP() else @sendHTTP()
+    if useUDP
+      @send = @sendUDP()
+    else if version == '0.9' and use_json == false
+      @send = @sendLineHTTP()
+    else
+      @send = @sendHTTP()
 
   write: (metrics) ->
-    @send @metricsJson metrics
+    @send metrics
 
   sendHTTP: ->
     version = @config.get('influxdb.version').get() ? '0.9'
+    use_json = @config.get('influxdb.use_json').get() ? false
     host = @config.get('influxdb.host').get() ? 'localhost'
     port = @config.get('influxdb.port').get() ? 8086
     database = @config.get('influxdb.database').get() ? 'bucky'
@@ -32,8 +40,28 @@ class Client
         u: username
         p: password
 
-    (metricsJson) ->
-      client form: metricsJson, (error, response, body) ->
+    (metrics) ->
+        client form: @metricsJson metrics, (error, response, body) ->
+          logger.log error if error
+
+  sendLineHTTP: ->
+    host = @config.get('influxdb.host').get() ? 'localhost'
+    port = @config.get('influxdb.port').get() ? 8086
+    database = @config.get('influxdb.database').get() ? 'bucky'
+    username = @config.get('influxdb.username').get() ? 'root'
+    password = @config.get('influxdb.password').get() ? 'root'
+    logger = @logger
+    endpoint = 'http://' + host + ':' + port + '/write'
+    client = request.defaults
+      method: 'POST'
+      url: endpoint
+      qs:
+        u: username
+        p: password
+        db: database
+
+    (metrics) ->
+      client body: @metricsLine metrics, (error, response, body) ->
         logger.log error if error
 
   sendUDP: ->
@@ -73,6 +101,17 @@ class Client
             sample: sample
     # @logger.log(JSON.stringify(data, null, 2))
     JSON.stringify data
+
+  metricsLine: (metrics) ->
+    data = []
+    for key, desc of metrics
+      row = @parseRow desc
+      continue unless row
+      [val, unit, sample] = row
+
+      data.push key + ' ' + 'value=' + [[parseFloat val]]
+
+    return data.join('\n')
 
   parseRow: (row) ->
     re = /([0-9\.]+)\|([a-z]+)(?:@([0-9\.]+))?/
