@@ -28,8 +28,8 @@ class Client
     groups = re.exec(row)
 
     unless groups
-      @logger.log "Unparsable row: #{ row }"
-      return
+      @logger.log "Unparsable row: #{ row }, zeroing out values"
+      return [0, 'ms', undefined]
 
     groups.slice(1, 4)
 
